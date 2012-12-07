@@ -133,32 +133,10 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
                     }
                 }
                 
-                
-    //        Properties prop = new Properties();
-    //        try {
-    //            prop.load(new FileInputStream("settings.properties"));
-    //            String lastFilePath = prop.getProperty("last_file");
-    //            if (lastFilePath != null){
-    //                if (new File(lastFilePath).exists()){ 
-    //                    this.lastFile = new File(lastFilePath);
-    //                    this.genfitController.setGenfitFile(new GenfitFile(lastFilePath));
-    //                    this.fillExperimentTable(this.genfitController);
-    //                    
-    //                }
-    //            }
-    //             
-    //        } catch (IOException e) {
-    //            e.printStackTrace();
-    //        }
-            
-            /*
-             if (new File("/Users/demalhi").exists()){ 
-                this.genfitController.setGenfitFile(new GenfitFile("/Users/demalhi/gen0001.dat"));
-                this.fillExperimentTable(this.genfitController);
-             }
-             */
+     
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(JGenfitView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JGenfitView.class.getName()).log(Level.SEVERE, "No settings.properties file found.");
+            
         } catch (IOException ex) {
             Logger.getLogger(JGenfitView.class.getName()).log(Level.SEVERE, null, ex);
         }

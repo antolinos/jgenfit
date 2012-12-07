@@ -1,0 +1,54 @@
+                                                                       
+
+ SIMPLEX Calls To Routine CHI2   ......:          0
+ ZXMIN Calls To Routine CHI2   ........:          0
+ Achieved Convergence; Error Flag .....:          0
+ Final Functional Value ...............:    17.3185    
+ Final Chi Square of Data Set .........:    17.3185    
+ Final Constraint Functional Value ....:    0.00000    
+ Functional Gradient Norm .............:    0.00000    
+
+Final set of optimized parameters: raw form
+
+  1) rs1        =    0.000000        0.000000    
+  2) dis1       =    0.000000        0.000000    
+  3) rs2        =    0.000000        0.000000    
+  4) dis2       =    0.000000        0.000000    
+  5) alpha      =    0.000000        0.000000    
+  6) thick      =    0.000000        0.000000    
+  7) rho0       =    0.000000        0.000000    
+  8) dens       =    0.000000        0.000000    
+  9) rhoin      =    0.000000        0.000000    
+
+Final set of optimized parameters: scaled form
+
+  1) rs1        =   0.5000000        0.000000      [   0.000000     -    1.000000    ]
+  2) dis1       =   0.5000000        0.000000      [   0.000000     -    1.000000    ]
+  3) rs2        =   0.5000000        0.000000      [   0.000000     -    1.000000    ]
+  4) dis2       =   0.5000000        0.000000      [   0.000000     -    1.000000    ]
+  5) alpha      =   0.5000000        0.000000      [   0.000000     -    1.000000    ]
+  6) thick      =   0.5000000        0.000000      [   0.000000     -    1.000000    ]
+  7) rho0       =   0.5000000        0.000000      [   0.000000     -    1.000000    ]
+  8) dens       =   0.5000000        0.000000      [   0.000000     -    1.000000    ]
+  9) rhoin      =   0.5000000        0.000000      [   0.000000     -    1.000000    ]
+
+
+ Experiment # .........................:          1
+ ==================================================
+
+ File Name ............................:chiara/b1_0_23__buffer_23_3c.por                                                                    
+ Description of Experiment ............:                                                                      
+
+ Final Chi Square of Experiment .......:    17.3185    
+ Scaling Factor kappa .................:   1.448684E-05    0.00000    
+ Flat Background B ....................:   9.014850E-02    0.00000    
+
+ Model #  1 -> 19- Two-density level Sphere                                                                        
+ ++++++++++++++++++++++++++++++++++++++++++
+
+ Weight of Model #   1 ................:    1.00000        0.00000      0
+ Inner Radius (Angs.) .................:    10.2586        0.00000      9   7.255050E-02    0.00000    
+ Shell Thickness (Angs.) ..............:   0.500000        0.00000      5
+ rho outer shells .....................:   0.250000        0.00000      5
+ rho inner shells .....................:   0.500000        0.00000      5
+ rho solvent ..........................:   0.500000        0.00000      5

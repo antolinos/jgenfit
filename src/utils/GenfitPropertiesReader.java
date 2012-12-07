@@ -111,7 +111,11 @@ public class GenfitPropertiesReader {
             prop.load(new FileInputStream("settings.properties"));
             prop.setProperty(key, value);                
             prop.store(new FileOutputStream("settings.properties"), null);
-        } catch (IOException ex) {
+        }
+        catch(FileNotFoundException exf){
+             Logger.getLogger(GenfitPropertiesReader.class.getName()).log(Level.SEVERE, "Not file settings.properties found", exf);
+        }
+        catch (IOException ex) {
             Logger.getLogger(GenfitPropertiesReader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

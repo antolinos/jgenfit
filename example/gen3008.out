@@ -1,0 +1,64 @@
+                                                                       
+
+ SIMPLEX Calls To Routine CHI2   ......:        366
+ ZXMIN Calls To Routine CHI2   ........:          0
+ Achieved Convergence; Error Flag .....:          0
+ Final Functional Value ...............:   0.373144    
+ Final Chi Square of Data Set .........:   0.373144    
+ Final Constraint Functional Value ....:    0.00000    
+ Functional Gradient Norm .............:    0.00000    
+
+Final set of optimized parameters: raw form
+
+  1) xmono      =  -8.4709471E-02    0.000000    
+  2) rdens      =  -5.7680990E-02    0.000000    
+  3) rnum       =  -0.2651348        0.000000    
+
+Final set of optimized parameters: scaled form
+
+  1) xmono      =   0.4576959        0.000000      [   0.000000     -    1.000000    ]
+  2) rdens      =    1.047118        0.000000      [   1.000000     -    1.100000    ]
+  3) rnum       =    1.737961        0.000000      [   1.000000     -    3.000000    ]
+
+
+ Experiment # .........................:          1
+ ==================================================
+
+ File Name ............................:C:\JGUI\java\example\diff_A_02.dat                                                                  
+ Description of Experiment ............:                                                                      
+
+ Final Chi Square of Experiment .......:   0.373144    
+ Scaling Factor kappa .................:   0.452476        0.00000    
+ Flat Background B ....................:   1.564169E-04    0.00000    
+
+ Model #  1 -> 15- All-Atoms Form Factor Of A PDB Structure With Solvation Shell Of Dummy Atoms And Multipole Expan
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ Weight of Model #   1 ................:   4.134367E-08    0.00000      5
+ Rho Solvent (10^-12 cm Angs.^-3)......:   9.352000E-02    0.00000      0
+ Relative Mass Density Shell #1........:    1.04712        0.00000      5
+ Relative Mass Density Shell #2........:    0.00000        0.00000      0
+ Relative Mass Density Shell #3........:    0.00000        0.00000      0
+ Contraction Factor Gamma..............:    1.00000        0.00000      0
+ Effective Aver. Atomic Radius.........:    1.62000        0.00000      0
+ X-Rays (-1.0) / Neutrons (X_D2O) Flag.:   -1.00000        0.00000      0
+ Polarized Neutron Beam: P(H) Factor...:    0.00000        0.00000      0
+ Polarized Neutron Beam: P(D) Factor...:    0.00000        0.00000      0
+ Number Of Listed PDB File.............:    2.00000        0.00000      5
+ Number Of Listed Wavelength...........:    0.00000        0.00000      0
+
+ Model #  2 -> 15- All-Atoms Form Factor Of A PDB Structure With Solvation Shell Of Dummy Atoms And Multipole Expan
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ Weight of Model #   2 ................:   2.449317E-08    0.00000      5
+ Rho Solvent (10^-12 cm Angs.^-3)......:   9.352000E-02    0.00000      0
+ Relative Mass Density Shell #1........:    1.04712        0.00000      5
+ Relative Mass Density Shell #2........:    0.00000        0.00000      0
+ Relative Mass Density Shell #3........:    0.00000        0.00000      0
+ Contraction Factor Gamma..............:    1.00000        0.00000      0
+ Effective Aver. Atomic Radius.........:    1.62000        0.00000      0
+ X-Rays (-1.0) / Neutrons (X_D2O) Flag.:   -1.00000        0.00000      0
+ Polarized Neutron Beam: P(H) Factor...:    0.00000        0.00000      0
+ Polarized Neutron Beam: P(D) Factor...:    0.00000        0.00000      0
+ Number Of Listed PDB File.............:    5.00000        0.00000      5
+ Number Of Listed Wavelength...........:    0.00000        0.00000      0
