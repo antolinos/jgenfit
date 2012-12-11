@@ -750,6 +750,10 @@ private void jButtonRUNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         String parameterFile = this.getSelectedFile().getAbsolutePath();//output + "/" + fileName;
 
         String newParameterFile = output + "\\gen" + this.jTextFieldInputCode.getText() + ".par";
+        if (OSDetector.isMac() || OSDetector.isUnix()){
+            newParameterFile = output + "/gen" + this.jTextFieldInputCode.getText() + ".par";
+        }
+      
         if (new File(parameterFile).exists()) {
              this.jTextFieldParameter.setText(newParameterFile);
              this.jCheckBoxParameter.setSelected(true);
@@ -817,11 +821,9 @@ private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 }//GEN-LAST:event_jButton4ActionPerformed
 
 private void jButtonSaveParameterFile1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveParameterFile1ActionPerformed
-         String parameterFile = this.getSelectedFile().getAbsolutePath();//output + "/" + fileName;
-
-       
-        String newParameterFile = parameterFile;//this.getOutputFolder().getAbsolutePath() + "\\gen" + this.jTextFieldInputCode.getText() + ".par";
-        if (new File(parameterFile).exists()) {
+         
+        String newParameterFile = this.getSelectedFile().getAbsolutePath();//this.getOutputFolder().getAbsolutePath() + "\\gen" + this.jTextFieldInputCode.getText() + ".par";
+        if (new File(newParameterFile).exists()) {
              this.jTextFieldFourier.setText(newParameterFile);
              this.jCheckBoxFourier.setSelected(true);
         }
