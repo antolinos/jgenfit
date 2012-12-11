@@ -111,7 +111,16 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             if (OSDetector.isMac() || OSDetector.isUnix()){
                 //pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "\\lxgen", "2");
                 pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getMacCompilerCommand(), "2");
-                System.out.println(GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getMacCompilerCommand());
+                //Check if it is executable
+                File file = new File(GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getMacCompilerCommand());
+                if (file.exists()){
+                    if (!file.canExecute()){
+                        System.out.println("It seems that the file is not an executable: " + GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getMacCompilerCommand());
+                    }
+                }
+                else{
+                    System.out.println("File doesn't exit: " + GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getMacCompilerCommand());
+                }
             }
             else{
                  //pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "\\pcgen.bat", "2");
