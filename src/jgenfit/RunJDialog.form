@@ -34,7 +34,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jLabel8" pref="111" max="32767" attributes="0"/>
+                          <Component id="jLabel8" pref="113" max="32767" attributes="0"/>
                           <Component id="jButtonRUN1" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
                           <Component id="jButtonRUN" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -44,7 +44,7 @@
                           <Group type="102" attributes="0">
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextFieldFilter" pref="138" max="32767" attributes="0"/>
+                              <Component id="jTextFieldFilter" pref="139" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
@@ -62,7 +62,7 @@
                           </Group>
                           <Component id="jScrollPane1" min="-2" pref="534" max="-2" attributes="1"/>
                       </Group>
-                      <EmptySpace pref="24" max="32767" attributes="0"/>
+                      <EmptySpace pref="25" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
