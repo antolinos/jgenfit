@@ -106,46 +106,40 @@ public class CompilerJDialog extends javax.swing.JDialog {
 
 private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-           // String[] command = {"genfit.exe", "2"};          
-           // Process process = Runtime.getRuntime().exec(command);
+ 
             ProcessBuilder pb;
             if (OSDetector.isMac() || OSDetector.isUnix()){
-                pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "\\lxgen.bat", "2");
+                //pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "\\lxgen", "2");
+                pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getMacCompilerCommand(), "2");
+                System.out.println(GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getMacCompilerCommand());
             }
             else{
-                 pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "\\pcgen.bat", "2");
+                 //pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "\\pcgen.bat", "2");
+                pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getWindowsCompilerCommand(), "2");
             }
-            /* Map<String, String> env = pb.environment();
-             env.put("VAR1", "myValue");
-             env.remove("OTHERVAR");
-             env.put("VAR2", env.get("VAR1") + "suffix");*/
-             
+
              File folder = new File(GenfitPropertiesReader.getGenfitFolder());
              
              if (folder.exists()){               
                  pb.directory(folder);                
                  OutputDisplayer displayer = new OutputDisplayer(jTextArea1);
+                 
                  displayer.commence(pb.start());
+                 this.jTextArea1.setText(pb.command().toString());
+                 this.jTextArea1.setText(this.jTextArea1.getText() + "\nCompiling:  it can takes several minutes.....");
+                 this.jTextArea1.setText(this.jTextArea1.getText() + "\nYou can compile manually by executing: ");
+                 String command = "";
+                 for (String param : pb.command()) {
+                     command = command + param + " ";
+                 }
+                  this.jTextArea1.setText(this.jTextArea1.getText() + command);
              }
              else{
                  this.jTextArea1.setText(folder.getAbsolutePath() + " doesn't exist");
              }
-            // Process p = pb.start();
          
-
-        
-//            String line;
-//            BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//            StringBuilder br = new StringBuilder();
-//            while ((line = input.readLine()) != null) {
-//                 br.append(line + "\n");
-//                 //this.jTextArea1.setText(br.toString());
-//                 System.out.println(line);
-//            }
-           
-//            input.close();
         } catch (IOException ex) {
-            Logger.getLogger(CompilerJDialog.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CompilerJDialog.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
                 
 }//GEN-LAST:event_jButton1ActionPerformed
@@ -194,7 +188,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         });
     }
     
-    public void compile() throws FileNotFoundException, IOException{
+    /*public void compile() throws FileNotFoundException, IOException{
         String commandName = null;
         if (OSDetector.isMac() || OSDetector.isUnix()) {
             commandName = GenfitPropertiesReader.getMacCompilerCommand();
@@ -205,8 +199,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         this.setTitle(commandName);
         
         if (commandName != null){
-            /** Execution of the compiler **/
-            
+         
            
             String[] command = {GenfitPropertiesReader.getGenfitFolder().trim() + "/" + commandName, "2"};   
             
@@ -225,21 +218,10 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 input.close();
            
                 
-            //command    
-            //String[] command = {, 2};
-//            Process process = Runtime.getRuntime().exec(command);
-//            
-//             String line;
-//                BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//                StringBuilder br = new StringBuilder();
-//                while ((line = input.readLine()) != null) {
-//                     br.append(line + "\n");
-//                     System.out.print(br.toString());
-//                }
-//                input.close();
+ 
         }
         this.setVisible(false);
-    }
+    }*/
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
