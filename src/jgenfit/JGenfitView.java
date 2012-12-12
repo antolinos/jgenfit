@@ -60,7 +60,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
     private ModelListJDialog modelListDialog;
     private SubmodelDialog submodelDialog;
     private EditModelDialog editModelDialog;
-    private File lastFile = null;
+    public File lastFile = null;
 
     public JGenfitView(SingleFrameApplication app) {
         super(app);
@@ -829,28 +829,14 @@ private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     this.removeExperimentModelRows();
     this.RemoveExperimentTableRows();
     
-    //this.genfitController.setGenfitFile(new GenfitFile("/Users/demalhi/dat/gen6005.dat"));
+    this.lastFile = this.genfitController.getGenfitFile();
     this.fillExperimentTable(this.genfitController);
 
     if (jTableExperiment.getRowCount() > 0){
         this.jTableExperiment.setRowSelectionInterval(0, 0);
-        this.experimentModelSelected = 0;
-        
+        this.experimentModelSelected = 0;        
         this.fillExperimentsModel();
     }
-    /*
-    DefaultTableModel tableModel = (DefaultTableModel) this.jTableModel.getModel();
-    while (tableModel.getRowCount() != 0) {
-            tableModel.removeRow(0);
-    }
-        
-        DefaultTableModel tableSUBModel = (DefaultTableModel) this.jTablesubModel.getModel();
-        while (tableSUBModel.getRowCount() != 0) {
-            tableSUBModel.removeRow(0);
-        }
-    //this.fillExperimentsModel();
-    //this.genfitController.getModelList();
-*/
 }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /** Add new experiment **/

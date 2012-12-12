@@ -88,18 +88,12 @@ public class GenfitController {
     public void save(int modelIndex, GenfitModel model){
         GenfitModel modelOld = this.getModelList().getModel(modelIndex);
         this.modelList = this.modelList.replace(modelOld.getContent(), model.getContent());
-    
     }
     
     public void save(Parameter parameter, int modelIndex, int submodelIndex){
         GenfitModel model = this.getModelList().getModel(modelIndex);
-        
-           
         String modelContent = model.getContent().replace(model.getSubmodel(submodelIndex).toString(), parameter.toString());
-     
-        
         this.modelList = this.modelList.replace(model.toString(), modelContent);
-        
     }
     
     public void save(GeneralSection generalSection){       
@@ -117,6 +111,8 @@ public class GenfitController {
         br.append(this.headerSection);
         br.append(this.experimentalSection);
         br.append(this.modelList);
+        
+       
         try{
             FileWriter fw = new FileWriter(file);
             BufferedWriter out = new BufferedWriter(fw);

@@ -85,7 +85,7 @@ public void setSelectedFile(File file){
     this.jFileChooser1.setSelectedFile(file);
 }
 
- 
+
 
 private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser1ActionPerformed
 
