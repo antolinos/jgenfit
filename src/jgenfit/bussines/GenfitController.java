@@ -112,11 +112,18 @@ public class GenfitController {
         br.append(this.experimentalSection);
         br.append(this.modelList);
         
-       
+        /** trim all the lines **/
+        String content = br.toString();
+        StringBuilder strimmedContent = new StringBuilder();
+        for (String line : content.split("\n")) {
+            strimmedContent.append(line.replaceAll("\\s+$", ""));
+            strimmedContent.append("\n");
+        }
         try{
             FileWriter fw = new FileWriter(file);
             BufferedWriter out = new BufferedWriter(fw);
-            out.write(br.toString());
+            //out.write(br.toString());
+            out.write(strimmedContent.toString());           
             out.close();
         }
         catch(Exception exp){
