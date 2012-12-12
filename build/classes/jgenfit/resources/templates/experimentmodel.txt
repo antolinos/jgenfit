@@ -1,3 +1,0 @@
- Number of Model ......................:$x
-                                       [-Starting-|---Lower--|---Upper--|Flag|-----Link-Function (up to 300 characters ...
- Weight of the model ..................:1.0                              0
