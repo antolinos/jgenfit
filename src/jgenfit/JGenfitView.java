@@ -913,14 +913,18 @@ private void removeParameterRows(){
 }
 
 private void fillParameters(){
-    this.experimentModelSelectedingle = this.jTableModel.getSelectedRow();
-    GenfitModel model = this.genfitController.getModelList().getModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.experimentModelSelectedingle));
-    //System.out.println(model.getSubmodelsText());
-this.removeParameterRows();
-   DefaultTableModel tableSubModel = (DefaultTableModel) this.jTablesubModel.getModel();
+    try{
+        this.experimentModelSelectedingle = this.jTableModel.getSelectedRow();
+        GenfitModel model = this.genfitController.getModelList().getModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.experimentModelSelectedingle));
+        this.removeParameterRows();
+        DefaultTableModel tableSubModel = (DefaultTableModel) this.jTablesubModel.getModel();
 
-    for (int i = 0; i < model.getSubmodelsText().size(); i++) {
-        tableSubModel.addRow(new Object[]{model.getSubmodelsText().get(i).replace(".", "").replace(":", ""), model.getSubmodel(i).getStarting(), model.getSubmodel(i).getLower(), model.getSubmodel(i).getUpper(), model.getSubmodel(i).getFlag()});
+        for (int i = 0; i < model.getSubmodelsText().size(); i++) {
+            tableSubModel.addRow(new Object[]{model.getSubmodelsText().get(i).replace(".", "").replace(":", ""), model.getSubmodel(i).getStarting(), model.getSubmodel(i).getLower(), model.getSubmodel(i).getUpper(), model.getSubmodel(i).getFlag()});
+        }
+     }
+    catch(Exception exp){
+        System.out.println(exp.getMessage());
     }
 }
 
@@ -994,6 +998,7 @@ private void jButtonScatteringParametersActionPerformed(java.awt.event.ActionEve
     /** EDIT MODEL **/
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        this.editModelDialog = new EditModelDialog(null, true);
+       System.out.println(this.genfitController.getModelList().getModel(this.getModelSelected()));
        this.editModelDialog.setModel(this.genfitController.getModelList().getModel(this.getModelSelected()));
        this.editModelDialog.genfitEvent.addListener(this);
        this.editModelDialog.setVisible(true);
@@ -1178,6 +1183,7 @@ private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 break;
             
             case SAVE_EXPERIMENT_MODEL:
+                
                 this.genfitController.save(this.getModelSelected(), this.editModelDialog.getModel());
                 break;
                 
@@ -1218,9 +1224,11 @@ private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private void save() {
       
         try {
+            //String path = "/Users/demalhi";
+            String path = "c:\\demalhi";
             
-            if (new File("/Users/demalhi").exists()){
-                genfitController.save("/Users/demalhi/t.txt");
+            if (new File(path).exists()){
+                genfitController.save(path + "\\t.txt");
             }
             
         } catch (Exception ex) {

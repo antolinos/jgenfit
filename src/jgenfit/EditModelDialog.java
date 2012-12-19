@@ -61,10 +61,7 @@ public class EditModelDialog extends javax.swing.JDialog {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "Key", "Value"
@@ -85,8 +82,18 @@ public class EditModelDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setColumnSelectionAllowed(true);
         jTable1.setName("jTable1"); // NOI18N
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jTable1InputMethodTextChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
+        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("jTable1.columnModel.title0")); // NOI18N
         jTable1.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("jTable1.columnModel.title1")); // NOI18N
 
@@ -104,7 +111,7 @@ public class EditModelDialog extends javax.swing.JDialog {
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
+                .add(jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 751, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -181,16 +188,27 @@ public class EditModelDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int rowsCount = this.jTable1.getRowCount();        
-        for (int i = 0; i< rowsCount; i++){
-            String value = this.jTable1.getModel().getValueAt(i, 1).toString();           
+        int rowsCount = this.jTable1.getRowCount();  
+        
+        System.out.println("----------------------");
+        for (int i = 0; i < rowsCount; i++){
+            //System.out.println( this.jTable1.getModel().getValueAt(i, 1).toString());    
+            String key = this.jTable1.getModel().getValueAt(i, 0).toString(); 
+            String value = this.jTable1.getModel().getValueAt(i, 1).toString(); 
+            
+            System.out.println(i + " Change: " + key + "  Value: " + value);
             this.model.changeParameterByIndex(i, value);
         }     
         
         
         this.genfitEvent.fire();
         this.setVisible(false);
+        
     }//GEN-LAST:event_jButton1ActionPerformed
+
+private void jTable1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTable1InputMethodTextChanged
+    System.out.println("changed");
+}//GEN-LAST:event_jTable1InputMethodTextChanged
 
     public GenfitModel getModel(){
         return this.model;

@@ -88,6 +88,7 @@ public class GenfitController {
     public void save(int modelIndex, GenfitModel model){
         GenfitModel modelOld = this.getModelList().getModel(modelIndex);
         this.modelList = this.modelList.replace(modelOld.getContent(), model.getContent());
+       
     }
     
     public void save(Parameter parameter, int modelIndex, int submodelIndex){
