@@ -12,6 +12,7 @@ package jgenfit;
 
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 import jgenfit.bussines.experiment.GenfitModel;
 import jgenfit.events.GenfitEvent;
@@ -190,6 +191,10 @@ public class EditModelDialog extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int rowsCount = this.jTable1.getRowCount();  
         
+        if(jTable1.isEditing()){
+            jTable1.getCellEditor().stopCellEditing();
+        }   
+        
         System.out.println("----------------------");
         for (int i = 0; i < rowsCount; i++){
             //System.out.println( this.jTable1.getModel().getValueAt(i, 1).toString());    
@@ -278,7 +283,7 @@ private void jTable1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) 
         while (tableSubModel.getRowCount() != 0) {
             tableSubModel.removeRow(0);
         }
-
+   
      
         for (int i = 0; i < parameters.size(); i++){
             if(!parameters.get(i).trim().equalsIgnoreCase("")){
@@ -288,10 +293,8 @@ private void jTable1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) 
                     String value = parameter.substring(40, parameter.length());
                     tableSubModel.addRow(new Object[]{key.trim(), value.trim()});
                 }                            
-            }
-            
-        }
-        
+            }            
+        }        
     }
     
     
