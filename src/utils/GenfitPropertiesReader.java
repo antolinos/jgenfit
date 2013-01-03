@@ -54,6 +54,9 @@ public class GenfitPropertiesReader {
             return  GenfitPropertiesReader.readParameter("last_file");
     }
     
+      public static void setLastOpenedFile(String filePath) throws FileNotFoundException, IOException{
+             GenfitPropertiesReader.writeParameter("last_file", filePath);
+    }
     
     public static void setOutputFolder(String value) throws FileNotFoundException, IOException {
            GenfitPropertiesReader.writeParameter("outputfolder", value);

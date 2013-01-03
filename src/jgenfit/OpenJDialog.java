@@ -19,6 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jgenfit.bussines.GenfitController;
 import jgenfit.bussines.GenfitFile;
+import jgenfit.utils.GenfitLogger;
+import utils.GenfitPropertiesReader;
 
 /**
  *
@@ -99,16 +101,23 @@ private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 if (file.canRead()){
                     if (this.genfitController != null){
                         this.genfitController.setGenfitFile(new GenfitFile(this.jFileChooser1.getSelectedFile().getAbsolutePath()));
-                        //System.out.println("File open: " + this.genfitController.getGenfitFile().getAbsolutePath());
+                       try{
+                           GenfitPropertiesReader.setLastOpenedFile(this.jFileChooser1.getSelectedFile().getAbsolutePath());
+                       }
+                       catch(Exception ex){
+                           GenfitLogger.error(ex.getMessage());
+                       }
+                       /*
                         Properties prop = new Properties();
                         try {
+                        
                             prop.load(new FileInputStream("settings.properties"));
                             prop.setProperty("last_file", this.jFileChooser1.getSelectedFile().getAbsolutePath());
                             prop.store(new FileOutputStream("settings.properties"), null);
                         } catch (IOException ex) {
                             Logger.getLogger(OpenJDialog.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                      
+                      */
                     }
                     else{
                         System.err.println("Controller is null");

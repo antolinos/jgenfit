@@ -16,7 +16,8 @@ public class JGenfitApp extends SingleFrameApplication {
      * At startup create and show the main frame of the application.
      */
     @Override protected void startup() {
-        show(new JGenfitView(this));
+        JGenfitView jgenfitView = new JGenfitView(this);
+        show(jgenfitView);
     }
 
     /**
@@ -32,6 +33,7 @@ public class JGenfitApp extends SingleFrameApplication {
      * @return the instance of JGenfitApp
      */
     public static JGenfitApp getApplication() {
+        
         return Application.getInstance(JGenfitApp.class);
     }
 
@@ -40,5 +42,6 @@ public class JGenfitApp extends SingleFrameApplication {
      */
     public static void main(String[] args) {
         launch(JGenfitApp.class, args);
+        
     }
 }

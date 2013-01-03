@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import jgenfit.bussines.experiment.ModelSingleExperiment;
+import jgenfit.utils.GenfitLogger;
 
 /**
  *
@@ -25,15 +26,13 @@ public class SingleExperiment{
 
         private final String SCATERING_FLAG = "Experimental Scattering";
         private static String MODEL_SEPARATOR = "For each model copy and paste the next three lines";
+        private static String END_OF_SECTION = " [End of section]";
         
         public SingleExperiment(String text) {
-            this.content = text;
-            
-          
-            
+            this.content = text;                                  
             /** Reading parameters **/
             List<String> parametersModelForExperiment = Arrays.asList(Arrays.asList(text.split(MODEL_SEPARATOR)).get(0).split("\n"));
-            for (int i = 2; i < parametersModelForExperiment.size() - 1; i++) {                                
+            for (int i = 1; i < parametersModelForExperiment.size() - 1; i++) {                                
                 List<String> parameter = Arrays.asList(parametersModelForExperiment.get(i).split(":"));
                 
                 String key = parameter.get(0);
@@ -59,8 +58,7 @@ public class SingleExperiment{
             //  int numerOfodelsInTheExperiment = (experimentModelForExperiment.size() - 2)/3;                
             
             for (int j = 1; j < (experimentModelForExperiment.size() - 2); j = j +3) {
-                   this.models.add(new ModelSingleExperiment(experimentModelForExperiment.get(j), experimentModelForExperiment.get(j + 1), experimentModelForExperiment.get(j + 2)));
-                   
+                   this.models.add(new ModelSingleExperiment(experimentModelForExperiment.get(j), experimentModelForExperiment.get(j + 1), experimentModelForExperiment.get(j + 2)));                   
             }
         }
         
@@ -104,20 +102,22 @@ public class SingleExperiment{
         }
         
         public void addNewModel(int modelSelected){
-           String template = this.readResourceExperimentModelTemplate();
-          
-           template = template.replace("$x", String.valueOf(modelSelected));
+           String template = this.readResourceExperimentModelTemplate();          
+           template = template.replace("$x", String.valueOf(modelSelected));           
+           /*this.content = this.content.replace(" [End of section]", template + " [End of section]");*/
            
-           this.content = this.content.replace(" [End of section]", template + " [End of section]");
-           
-           
+           if (this.content.contains(END_OF_SECTION)){
+               this.content = this.content.replace(END_OF_SECTION, template + END_OF_SECTION);
+           }     
+           else{
+               this.content = this.content + template;
+           }
         }
         
         private String readResourceExperimentModelTemplate(){
             StringBuilder sb = new StringBuilder();
             String resourcesPath = "/jgenfit/resources/templates/experimentmodel.txt";
             try {
-
                 BufferedReader objBin = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(resourcesPath)));
                 if (objBin != null) {
                     String strLine = "";
@@ -125,18 +125,13 @@ public class SingleExperiment{
                         sb.append(strLine + "\n" );
                     }
                     objBin.close();
-
                 } else {
-                    System.out.println("Error: Unable to retrieve InputStream");
+                    GenfitLogger.error("Unable to retrieve InputStream");
                 }
             } catch (Exception ex) {
-                System.out.println("Error: Unable to retrieve InputStream");
-            
-            }
-            
-
-            return sb.toString();
-        
+                GenfitLogger.error("Unable to retrieve InputStream");            
+            }            
+            return sb.toString();        
         }
         
         
@@ -237,23 +232,16 @@ public class SingleExperiment{
           return this.getParam("Scattering Curve");
         }
         
-        public void setExperimentalScatteringCurve(String value){
-           
-            
+        public void setExperimentalScatteringCurve(String value){                       
             List<String> lines = Arrays.asList(this.content.split("\n"));
             for (String line : lines) {
-
-                if (line.contains(SCATERING_FLAG)){
-                
-                    String newline = this.setScatteringParameter(line, 40, 140, value);
-                
+                if (line.contains(SCATERING_FLAG)){                
+                    String newline = this.setScatteringParameter(line, 40, 140, value);                
                     this.content = this.content.replace(line, newline);
-                }
-               
+                }               
             } 
         }
-                  
-        
+                          
         public boolean getBooleanParam(String key){
             if (getParam(key) != null){
                 if (getParam(key).contains("1")){

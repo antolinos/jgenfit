@@ -15,6 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jgenfit.bussines.GenfitController;
 import jgenfit.bussines.GenfitFile;
+import jgenfit.utils.GenfitLogger;
+import utils.GenfitPropertiesReader;
 
 /**
  *
@@ -79,36 +81,33 @@ public void setGenfitFileController(GenfitController genfitController){
 
 private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser1ActionPerformed
 
-    if (evt.getActionCommand().equals("CancelSelection")){
-        System.err.println("Cancel");
+    if (!evt.getActionCommand().equals("CancelSelection")){
+    /*    System.err.println("Cancel");
     }
-    else{
+    else{*/
         if (this.jFileChooser1.getSelectedFile() != null){
-           
-                File file = this.jFileChooser1.getSelectedFile();
+               // File file = this.jFileChooser1.getSelectedFile();
                 if (true){
                     if (this.genfitController != null){
                         //this.genfitController.setGenfitFile(new GenfitFile(this.jFileChooser1.getSelectedFile().getAbsolutePath()));
                         try {
-                            this.genfitController.save(this.jFileChooser1.getSelectedFile().getAbsolutePath());
-                            
+                            this.genfitController.save(this.jFileChooser1.getSelectedFile().getAbsolutePath());                           
+                            GenfitPropertiesReader.setLastOpenedFile(this.jFileChooser1.getSelectedFile().getAbsolutePath());
                         } catch (Exception ex) {
                             Logger.getLogger(SaveJDialog.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                     else{
-                        System.err.println("Controller is null");
+                         GenfitLogger.error("Controller is null");
                     }
                 }
                 else{
-                    System.err.println("File no readable");
-                }
-            
+                    GenfitLogger.error("File no readable");
+                }            
         }
         else{
-            System.err.println("Selected file: null");
-        }
-       
+            GenfitLogger.error("Selected file: null");
+        }       
     }
     this.setVisible(false);
     

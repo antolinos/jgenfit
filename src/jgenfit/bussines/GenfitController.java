@@ -15,6 +15,7 @@ import jgenfit.bussines.experiment.SingleExperimentSection;
 import jgenfit.bussines.experiment.ModelSingleExperiment;
 import jgenfit.bussines.experiment.Parameter;
 import jgenfit.bussines.experiment.SingleExperiment;
+import jgenfit.utils.GenfitLogger;
 
 /**
  *
@@ -47,9 +48,7 @@ public class GenfitController {
     }
     
     public SingleExperimentSection getSingleExperimentSection() {   
-        //System.out.println(this.experimentalSection);
         return new SingleExperimentSection(this.experimentalSection);
-        //return new SingleExperimentSection(this.genfitFile.getExperimentalSectionText());
     }
     
     public ModelList getModelList(){
@@ -101,8 +100,30 @@ public class GenfitController {
         this.headerSection = generalSection.getContent();        
     }
     
-    public void save(SingleExperiment singleExperiment){       
-        this.experimentalSection = this.getSingleExperimentSection().getContent().replace(this.getSingleExperimentSection().getExperiments().get(0).getContent(), singleExperiment.getContent());        
+    public void save(SingleExperiment singleExperimentUpdated, int index){       
+     
+        //this.experimentalSection = this.getSingleExperimentSection().getContent().replace(this.getSingleExperimentSection().getExperiments().get(0).getContent(), singleExperiment.getContent());        
+        //this.experimentalSection = this.getSingleExperimentSection().getContent().replace(oldExperiment, newExperiment);        
+       
+        
+        
+        StringBuilder newExperimentalSection = new StringBuilder();
+        newExperimentalSection.append(this.getSingleExperimentSection().getHeader());
+        
+        int aux = 0;
+        for (SingleExperiment singleExperiment : this.getSingleExperimentSection().getExperiments()) {
+            //System.out.append(singleExperiment1.getContent());
+            if (aux == index){
+                 newExperimentalSection.append(singleExperimentUpdated.getContent());
+           }
+            else{
+                newExperimentalSection.append(singleExperiment.getContent());
+            }
+            aux ++;
+        }
+        this.experimentalSection = newExperimentalSection.toString();
+     
+        
     }
     
     public void save(String filePath) throws Exception{

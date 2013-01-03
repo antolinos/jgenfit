@@ -43,7 +43,7 @@ import java.util.Arrays;
             }
         }
         
-        public String getModelNumber(){
+        public String getModelNumber(){            
             return Arrays.asList(this.numberModelLine.split(":")).get(1);
         }
         

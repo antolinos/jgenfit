@@ -53,21 +53,15 @@ public class GenfitFile extends File {
   
     
     
-    /** Read the file and retuns the string corresponding with the single experimental section **/
+    /** Read the file and retuns the string corresponding with the single experimental section 
+     * from "SINGLE EXPERIMENT SECTION" to "MODEL LIST #############"
+     **/
     public String getExperimentalSectionText(){
-       
         try{
             StringBuilder experimentalSectionText = new StringBuilder();
-            boolean insideTargetRegion = false;
-            
+            boolean insideTargetRegion = false;            
             List<String> lines = Arrays.asList(this.content.split("\n"));
-            
-            //Read File Line By Line
             for (int i = 0; i < lines.size(); i++) {
-                
-            
-            //while ((strLine = br.readLine()) != null) {
-                
                 if (lines.get(i).contains("SINGLE EXPERIMENT SECTION")){
                     insideTargetRegion = true;
                     
@@ -79,31 +73,23 @@ public class GenfitFile extends File {
                 }
                 
                 if (insideTargetRegion){
-                   
                     experimentalSectionText.append(lines.get(i) + "\n");
                 }
-            }
-            
+            }            
         } catch (Exception e) {//Catch exception if any
             System.err.println("Error: " + e.getMessage());
-        }
-        
-       
+        }        
         return content.toString();
     }
     
     
-    public String getModelListText(){
-        String content = this.getContent();
-        return content.substring(content.indexOf("MODEL LIST #############"));
-    
+    public String getModelListText(){        
+        return this.getContent().substring(this.getContent().indexOf("MODEL LIST #############"));    
     }
     
     
     public String getHeaderSection(){
-        String content = this.getContent();
-        return content.substring(content.indexOf(" GENERAL SECTION"), content.indexOf(" SINGLE EXPERIMENT SECTION"));
-    
+        return this.getContent().substring(this.getContent().indexOf(" GENERAL SECTION"), this.getContent().indexOf(" SINGLE EXPERIMENT SECTION"));    
     }
 
     

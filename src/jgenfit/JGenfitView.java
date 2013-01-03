@@ -23,6 +23,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.Timer;
@@ -38,6 +42,7 @@ import jgenfit.bussines.experiment.Parameter;
 import jgenfit.bussines.experiment.SingleExperiment;
 import jgenfit.events.GenfitEventListener;
 import jgenfit.settings.SettingsJDialog;
+import jgenfit.utils.GenfitLogger;
 import utils.GenfitPropertiesReader;
 
 /**
@@ -90,7 +95,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         });
         idleIcon = resourceMap.getIcon("StatusBar.idleIcon");
         statusAnimationLabel.setIcon(idleIcon);
-        progressBar.setVisible(false);
+        //progressBar.setVisible(false);
 
         // connecting action tasks to status bar via TaskMonitor
         TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
@@ -104,47 +109,50 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
                         busyIconIndex = 0;
                         busyIconTimer.start();
                     }
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(true);
+                    //progressBar.setVisible(true);
+                   // progressBar.setIndeterminate(true);
                 } else if ("done".equals(propertyName)) {
                     busyIconTimer.stop();
                     statusAnimationLabel.setIcon(idleIcon);
-                    progressBar.setVisible(false);
-                    progressBar.setValue(0);
+                   // progressBar.setVisible(false);
+                    //progressBar.setValue(0);
                 } else if ("message".equals(propertyName)) {
                     String text = (String) (evt.getNewValue());
                     statusMessageLabel.setText((text == null) ? "" : text);
                     messageTimer.restart();
                 } else if ("progress".equals(propertyName)) {
                     int value = (Integer) (evt.getNewValue());
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(false);
-                    progressBar.setValue(value);
+                  //  progressBar.setVisible(true);
+                   // progressBar.setIndeterminate(false);
+                   // progressBar.setValue(value);
                 }
             }
         });
         try {
-            String lastFilePath = GenfitPropertiesReader.readLastOpenedFile();
+            String lastFilePath = GenfitPropertiesReader.readLastOpenedFile();            
             if (lastFilePath != null){
                     if (new File(lastFilePath).exists()){ 
+                        this.setStatusBarLabel("File loaded: " + lastFilePath);
                         this.lastFile = new File(lastFilePath);
                         this.genfitController.setGenfitFile(new GenfitFile(lastFilePath));
                         this.fillExperimentTable(this.genfitController);
                     }
-                }
-                
-     
+                }                     
         } catch (FileNotFoundException ex) {
             Logger.getLogger(JGenfitView.class.getName()).log(Level.SEVERE, "No settings.properties file found.");
             
         } catch (IOException ex) {
             Logger.getLogger(JGenfitView.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
-       
-       
     }
 
+  private void setStatusBarLabel(String message){
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        
+        this.jLabelFilePath.setText("[INFO] " + message + " at " + dateFormat.format(cal.getTime()) );
+  }
+    
     @Action
     public void showAboutBox() {
         if (aboutBox == null) {
@@ -189,7 +197,8 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jButton2 = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItemOpen = new javax.swing.JMenuItem();
+        jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
@@ -207,8 +216,8 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         statusPanel = new javax.swing.JPanel();
         javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
         statusMessageLabel = new javax.swing.JLabel();
+        jLabelFilePath = new java.awt.Label();
         statusAnimationLabel = new javax.swing.JLabel();
-        progressBar = new javax.swing.JProgressBar();
 
         mainPanel.setName("mainPanel"); // NOI18N
         mainPanel.setPreferredSize(new java.awt.Dimension(840, 550));
@@ -320,14 +329,16 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                 .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 26, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(jButtonEdit)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButtonScatteringParameters))
-                    .add(jScrollPane1, 0, 0, Short.MAX_VALUE))
-                .add(208, 208, 208))
+                        .add(jButtonScatteringParameters)
+                        .add(208, 208, 208))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+                        .add(184, 184, 184))))
         );
 
         jPanel3.setBackground(resourceMap.getColor("jPanel3.background")); // NOI18N
@@ -502,7 +513,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -513,7 +524,10 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
                 return canEdit [columnIndex];
             }
         });
+        jTablesubModel.setColumnSelectionAllowed(true);
         jTablesubModel.setName("jTablesubModel"); // NOI18N
+        jTablesubModel.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTablesubModel.getTableHeader().setReorderingAllowed(false);
         jTablesubModel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTablesubModelMouseClicked(evt);
@@ -592,22 +606,31 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
-        jMenuItem6.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem6.setText(resourceMap.getString("jMenuItem6.text")); // NOI18N
-        jMenuItem6.setName("jMenuItem6"); // NOI18N
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemOpen.setText(resourceMap.getString("jMenuItemOpen.text")); // NOI18N
+        jMenuItemOpen.setName("jMenuItemOpen"); // NOI18N
+        jMenuItemOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem6ActionPerformed(evt);
+                onOpen(evt);
             }
         });
-        fileMenu.add(jMenuItem6);
+        fileMenu.add(jMenuItemOpen);
 
-        jMenuItem7.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem10.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem10.setText(resourceMap.getString("jMenuItem10.text")); // NOI18N
+        jMenuItem10.setName("jMenuItem10"); // NOI18N
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onSave(evt);
+            }
+        });
+        fileMenu.add(jMenuItem10);
+
         jMenuItem7.setText(resourceMap.getString("jMenuItem7.text")); // NOI18N
         jMenuItem7.setName("jMenuItem7"); // NOI18N
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
+                onSaveAs(evt);
             }
         });
         fileMenu.add(jMenuItem7);
@@ -631,7 +654,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         });
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                onGeneral(evt);
             }
         });
         jMenu1.add(jMenuItem1);
@@ -645,7 +668,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jMenuItem3.setName("jMenuItem3"); // NOI18N
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                onRunExperiment(evt);
             }
         });
         jMenu2.add(jMenuItem3);
@@ -654,7 +677,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jMenuItem8.setName("jMenuItem8"); // NOI18N
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem8ActionPerformed(evt);
+                onExploreResults(evt);
             }
         });
         jMenu2.add(jMenuItem8);
@@ -673,7 +696,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jMenuItem4.setName("jMenuItem4"); // NOI18N
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                onCompileFortranCode(evt);
             }
         });
         jMenu3.add(jMenuItem4);
@@ -682,7 +705,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jMenuItem5.setName("jMenuItem5"); // NOI18N
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
+                onAdvancedParamteres(evt);
             }
         });
         jMenu3.add(jMenuItem5);
@@ -691,7 +714,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jMenuItem9.setName("jMenuItem9"); // NOI18N
         jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem9ActionPerformed(evt);
+                onAdvancedCommonParameters(evt);
             }
         });
         jMenu3.add(jMenuItem9);
@@ -700,7 +723,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jMenuItem2.setName("jMenuItem2"); // NOI18N
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                onOptions(evt);
             }
         });
         jMenu3.add(jMenuItem2);
@@ -717,15 +740,17 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         menuBar.add(helpMenu);
 
         statusPanel.setName("statusPanel"); // NOI18N
+        statusPanel.setRequestFocusEnabled(false);
 
         statusPanelSeparator.setName("statusPanelSeparator"); // NOI18N
 
         statusMessageLabel.setName("statusMessageLabel"); // NOI18N
 
+        jLabelFilePath.setName("filePath"); // NOI18N
+        jLabelFilePath.setText(resourceMap.getString("filePath.text")); // NOI18N
+
         statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
-
-        progressBar.setName("progressBar"); // NOI18N
 
         org.jdesktop.layout.GroupLayout statusPanelLayout = new org.jdesktop.layout.GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
@@ -735,21 +760,24 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 670, Short.MAX_VALUE)
-                .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 820, Short.MAX_VALUE)
                 .add(statusAnimationLabel)
                 .addContainerGap())
+            .add(statusPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabelFilePath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 784, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(statusPanelLayout.createSequentialGroup()
                 .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(statusMessageLabel)
-                    .add(statusAnimationLabel)
-                    .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(statusMessageLabel)
+                        .add(statusAnimationLabel))
+                    .add(jLabelFilePath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(3, 3, 3))
         );
 
@@ -759,14 +787,14 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
     }// </editor-fold>//GEN-END:initComponents
 
     /** RUN DIALOG **/
-private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+private void onRunExperiment(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onRunExperiment
     RunJDialog runJDialog = new RunJDialog(null, true);
     runJDialog.setController(this.genfitController);
     runJDialog.setModal(false);
     runJDialog.setVisible(true);
 
 
-}//GEN-LAST:event_jMenuItem3ActionPerformed
+}//GEN-LAST:event_onRunExperiment
 
 private void RemoveExperimentTableRows(){
         DefaultTableModel tableModel = (DefaultTableModel) this.jTableExperiment.getModel();
@@ -777,31 +805,25 @@ private void RemoveExperimentTableRows(){
 }
 
 
-    private void fillExperimentTable(GenfitController genfitController) {
-        
-        SingleExperimentSection singleExperimentSection = genfitController.getSingleExperimentSection();
-        
+    private void fillExperimentTable(GenfitController genfitController) {        
+        SingleExperimentSection singleExperimentSection = genfitController.getSingleExperimentSection();       
         this.RemoveExperimentTableRows();
         DefaultTableModel tableModel = (DefaultTableModel) this.jTableExperiment.getModel();
-/*
-        while (tableModel.getRowCount() != 0) {
-            tableModel.removeRow(0);
-        }
-*/
-        for (int i = 0; i < singleExperimentSection.getSingleExperimentCount(); i++) {
-            SingleExperiment singleExperiment = singleExperimentSection.getExperiments().get(i);
-            tableModel.addRow(new Object[]{singleExperiment.getModelsNumber(), singleExperiment.getExperimentalScatteringCurve(), singleExperiment.getDescription()});
-        }
         
-        if (this.experimentModelSelected != -1)
+        for (int i = 0; i < singleExperimentSection.getSingleExperimentCount(); i++) {
+            SingleExperiment singleExperiment = singleExperimentSection.getExperiments().get(i);                        
+            tableModel.addRow(new Object[]{singleExperiment.getModelsNumber(), singleExperiment.getExperimentalScatteringCurve(), singleExperiment.getDescription()});
+        }        
+        if (this.experimentModelSelected != -1){
             this.jTableExperiment.setRowSelectionInterval(this.experimentModelSelected, this.experimentModelSelected);
+        }
 
     }
 
     
     
     /** OPEN FILE DIALOG **/
-private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+private void onOpen(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpen
     OpenJDialog openJDialog = new OpenJDialog(null, true);
     openJDialog.setGenfitFileController(this.genfitController);
     String sasFolder = null;
@@ -830,6 +852,8 @@ private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     this.RemoveExperimentTableRows();
     
     this.lastFile = this.genfitController.getGenfitFile();
+    
+    this.setStatusBarLabel("File loaded: " + this.lastFile.getAbsolutePath());
     this.fillExperimentTable(this.genfitController);
 
     if (jTableExperiment.getRowCount() > 0){
@@ -837,7 +861,7 @@ private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         this.experimentModelSelected = 0;        
         this.fillExperimentsModel();
     }
-}//GEN-LAST:event_jMenuItem6ActionPerformed
+}//GEN-LAST:event_onOpen
 
     /** Add new experiment **/
 private void jButtonAddExperimentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddExperimentActionPerformed
@@ -853,9 +877,14 @@ private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     this.singleExperimentDialog = new SingleExperimentJDialog(null, true);
     this.singleExperimentDialog.genfitEvent.addListener(this);
 
-    this.singleExperimentDialog.setSingleExperiment(this.genfitController.getSingleExperimentSection().getExperiments().get(this.jTableExperiment.getSelectedRow()));
-    this.singleExperimentDialog.setTitle(this.genfitController.getSingleExperimentSection().getExperiments().get(this.jTableExperiment.getSelectedRow()).getDescription());
-    this.singleExperimentDialog.setVisible(true);
+   if (this.jTableExperiment.getSelectedRow() != -1){
+        this.singleExperimentDialog.setSingleExperiment(this.genfitController.getSingleExperimentSection().getExperiments().get(this.jTableExperiment.getSelectedRow()));
+        this.singleExperimentDialog.setTitle(this.genfitController.getSingleExperimentSection().getExperiments().get(this.jTableExperiment.getSelectedRow()).getDescription());
+        this.singleExperimentDialog.setVisible(true);
+   }
+   else{
+       GenfitLogger.warn("No experiment selected. Click on an experiment");
+   }
     
     
 
@@ -924,7 +953,7 @@ private void fillParameters(){
         }
      }
     catch(Exception exp){
-        System.out.println(exp.getMessage());
+        GenfitLogger.error(exp.getMessage());
     }
 }
 
@@ -954,14 +983,14 @@ private void jMenuItem1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:
         //System.out.println("Click " + e.getActionCommand());
     }
 
-private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+private void onGeneral(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onGeneral
     this.generalDialog = new GeneralJDialog(null, true);
     GeneralSection general = this.genfitController.getGeneralSection();
     generalDialog.genfitEvent.addListener(this);
     generalDialog.setGeneralSection(general);
     generalDialog.setVisible(true);
 
-}//GEN-LAST:event_jMenuItem1ActionPerformed
+}//GEN-LAST:event_onGeneral
 
 private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
    
@@ -1006,38 +1035,37 @@ private void jButtonScatteringParametersActionPerformed(java.awt.event.ActionEve
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /** SAVE **/
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+    private void onSaveAs(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSaveAs
         SaveJDialog saveJDialog = new SaveJDialog(null, true);
         saveJDialog.setGenfitFileController(this.genfitController);
-        saveJDialog.setVisible(true);     
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
+        saveJDialog.setVisible(true);  
+    }//GEN-LAST:event_onSaveAs
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-         GenfitModel model = this.genfitController.getModelList().getModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.jTableModel.getSelectedRow()));
-            Parameter submodel = model.getSubmodel(this.subModelSelected);
-    
-    this.submodelDialog = new SubmodelDialog(null, true);
-    this.submodelDialog.genfitEvent.addListener(this);
-    this.submodelDialog.setSubmodel(submodel);
-    this.submodelDialog.setVisible(true);
+        GenfitModel model = this.genfitController.getModelList().getModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.jTableModel.getSelectedRow()));
+        Parameter submodel = model.getSubmodel(this.subModelSelected);    
+        this.submodelDialog = new SubmodelDialog(null, true);
+        this.submodelDialog.genfitEvent.addListener(this);
+        this.submodelDialog.setSubmodel(submodel);
+        this.submodelDialog.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
 private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
    
 }//GEN-LAST:event_jMenu3ActionPerformed
 
-private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+private void onOptions(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOptions
  this.settingsJDialog = new SettingsJDialog(null, true);
     this.settingsJDialog.setVisible(true);  
    
-}//GEN-LAST:event_jMenuItem2ActionPerformed
+}//GEN-LAST:event_onOptions
 
-private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+private void onExploreResults(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onExploreResults
     ExploreResultsJDialog dialog = new ExploreResultsJDialog(null, true);
     dialog.setVisible(true);
-}//GEN-LAST:event_jMenuItem8ActionPerformed
+}//GEN-LAST:event_onExploreResults
 
-private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+private void onAdvancedParamteres(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdvancedParamteres
     EditFileJDialog editFileJDialog = new EditFileJDialog(null, true);
     
    
@@ -1056,15 +1084,15 @@ private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         }
 
         editFileJDialog.setVisible(true);
-}//GEN-LAST:event_jMenuItem5ActionPerformed
+}//GEN-LAST:event_onAdvancedParamteres
 
-private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+private void onCompileFortranCode(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCompileFortranCode
             CompilerJDialog dialog = new CompilerJDialog(null, true);
             dialog.setVisible(true);  
       
-}//GEN-LAST:event_jMenuItem4ActionPerformed
+}//GEN-LAST:event_onCompileFortranCode
 
-private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+private void onAdvancedCommonParameters(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdvancedCommonParameters
   EditFileJDialog editFileJDialog = new EditFileJDialog(null, true);
     
    
@@ -1083,7 +1111,21 @@ private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         }
 
         editFileJDialog.setVisible(true);
-}//GEN-LAST:event_jMenuItem9ActionPerformed
+}//GEN-LAST:event_onAdvancedCommonParameters
+
+private void onSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSave
+    if (this.lastFile != null ){
+        try{
+            String message = this.lastFile.getAbsolutePath() + " saved";
+            GenfitLogger.info(message);
+            this.setStatusBarLabel(message);
+            this.genfitController.save(this.lastFile.getAbsolutePath());
+        }
+        catch(Exception exp){
+            GenfitLogger.error(exp.getMessage());
+        }
+    }
+}//GEN-LAST:event_onSave
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -1095,18 +1137,20 @@ private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private java.awt.Label jLabelFilePath;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
+    private javax.swing.JMenuItem jMenuItemOpen;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1122,7 +1166,6 @@ private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JTable jTablesubModel;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JProgressBar progressBar;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
@@ -1146,16 +1189,12 @@ private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         switch (e.getType()) {
             case GENERAL_SAVE:
                 genfitController.save(this.generalDialog.generalSection);
-                return;
-               
+                return;               
 
             case SINGLE_EXPERIMENT_SAVE:
-
-                SingleExperiment singleExperiment = this.singleExperimentDialog.singleExperiment;
-                genfitController.save(singleExperiment);
-               
-                this.fillExperimentTable(this.genfitController);
-                
+                SingleExperiment singleExperiment = this.singleExperimentDialog.singleExperiment;               
+                genfitController.save(singleExperiment, this.jTableExperiment.getSelectedRow());
+                this.fillExperimentTable(this.genfitController);                
                 return;
 
             case WEIGHT_PARAMETERS_SAVE:
@@ -1166,15 +1205,14 @@ private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 break;
             case SCATTERING_PARAMETERS_SAVE:
                 SingleExperiment singleExperiment2 = this.scatteringParameterDialog.getExperiment();
-                genfitController.save(singleExperiment2);
-
+                genfitController.save(singleExperiment2, this.jTableExperiment.getSelectedRow());
                 break;
                 
             case ADD_NEW_EXPERIMENT_MODEL:
                 int modelSelected = this.modelListDialog.getModelSelected();
                 SingleExperiment single = this.genfitController.getSingleExperimentSection().getExperiments().get(this.jTableExperiment.getSelectedRow());                
                 single.addNewModel(modelSelected);    
-                genfitController.save(single);
+                genfitController.save(single, this.jTableExperiment.getSelectedRow());
 
                 break;
             case PARAMETER_SAVE:                                
@@ -1183,7 +1221,6 @@ private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 break;
             
             case SAVE_EXPERIMENT_MODEL:
-                
                 this.genfitController.save(this.getModelSelected(), this.editModelDialog.getModel());
                 break;
                 
@@ -1221,14 +1258,13 @@ private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
     }
 
-    private void save() {
-      
+    private void save() {      
         try {
             //String path = "/Users/demalhi";
             String path = "c:\\demalhi";
             
             if (new File(path).exists()){
-                genfitController.save(path + "\\t.txt");
+                genfitController.save(path + "\\jgenfitdebug.txt");
             }
             
         } catch (Exception ex) {
