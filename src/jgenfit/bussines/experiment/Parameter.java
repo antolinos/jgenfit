@@ -4,6 +4,8 @@
  */
 package jgenfit.bussines.experiment;
 
+import jgenfit.utils.GenfitLogger;
+
 /**
  *
  * @author alex
@@ -80,7 +82,13 @@ public class Parameter {
     }
     
     public String getParameter(int start, int end){
-        return this.content.substring(start, end).trim();
+        try{
+            return this.content.substring(start, end).trim();
+        }
+        catch(Exception Exp){
+            GenfitLogger.warn(Exp.getMessage() + ". Expected a length of " + end + " and found a length of " + this.content.length() + " at:" + this.content);
+        }
+        return this.content.substring(start).trim();
     }
 
     public void setParameters(int start, int end, String value) {
