@@ -191,9 +191,9 @@ public class SingleExperiment{
             for (int i = 0; i < 12; i++) {
                 if (line.length() > paramIndex){
                     /** name **/
-                    String value = line.substring(paramIndex, paramIndex + 10);
+                    String value = line.substring(paramIndex, paramIndex + 11);
                     /** value **/
-                    String key = line.substring(paramIndex + 10, paramIndex + 20);
+                    String key = line.substring(paramIndex + 10, paramIndex + 21);
                     //System.out.println("Value: " + value.replace(" ", "|") + "   Key: " + key.replace(" ", "*"));
                     paramIndex = paramIndex + 21;                    
                     //values.put(value, key);
