@@ -107,7 +107,7 @@ public class SingleExperiment{
            /*this.content = this.content.replace(" [End of section]", template + " [End of section]");*/
            
            if (this.content.contains(END_OF_SECTION)){
-               this.content = this.content.replace(END_OF_SECTION, template + END_OF_SECTION);
+               this.content = this.content.replace(END_OF_SECTION, template + END_OF_SECTION) + "\n";
            }     
            else{
                this.content = this.content + template;

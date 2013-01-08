@@ -5,6 +5,8 @@
 package jgenfit.bussines.experiment;
 
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,11 +18,38 @@ import jgenfit.utils.GenfitLogger;
 public class SingleExperimentSection {
     private static String EXPERIMENT_SEPARATOR = " For each experiment copy and paste starting from the next line";
     private static String SINGLE_EXPERIMENT_SEPARATOR = "                                       [---File Name ---------------------------------------------------------------------------------------|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|Par. Symb.|--Value--|";
+    private String END_OF_SECTION = "[End of section]";
     private String content;
     int experimentsCount;
     
     List<SingleExperiment> experiments = new ArrayList<SingleExperiment>();
     private String header;
+  
+    
+    
+     private String readResourceExperimentTemplate(){
+            StringBuilder sb = new StringBuilder();
+            String resourcesPath = "/jgenfit/resources/templates/experiment.txt";
+            try {
+                BufferedReader objBin = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(resourcesPath)));
+                if (objBin != null) {
+                    String strLine = "";
+                    while ((strLine = objBin.readLine()) != null) {
+                        sb.append(strLine + "\n" );
+                    }
+                    objBin.close();
+                } else {
+                    GenfitLogger.error("Unable to retrieve InputStream");
+                }
+            } catch (Exception ex) {
+                GenfitLogger.error("Unable to retrieve InputStream");            
+            }            
+            return sb.toString();        
+    }
+    
+    public void addNewExperiment(){
+        this.content = this.content.replace(this.END_OF_SECTION, this.readResourceExperimentTemplate());    
+    }
     
     public SingleExperimentSection(String content){
         this.content = content;
@@ -66,7 +95,7 @@ public class SingleExperimentSection {
                     }
                    }
                    
-                   if (line.contains("[End of section]")){
+                   if (line.contains(END_OF_SECTION)){
                         //System.out.println("=============== last");
                         singleSectionExperiment.append(line + "\n");  
                         this.experiments.add(new SingleExperiment(singleSectionExperiment.toString()));  

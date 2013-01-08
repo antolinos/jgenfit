@@ -59,8 +59,9 @@
                       <Component id="jScrollPane1" min="-2" pref="575" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jButtonScatteringParameters" pref="191" max="32767" attributes="1"/>
                           <Component id="jButtonEdit" alignment="0" pref="191" max="32767" attributes="1"/>
+                          <Component id="jButton4" alignment="0" pref="191" max="32767" attributes="0"/>
+                          <Component id="jButtonScatteringParameters" pref="191" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -75,15 +76,14 @@
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="jButtonEdit" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                               <Component id="jButtonScatteringParameters" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="208" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jButton4" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="jScrollPane1" pref="76" max="32767" attributes="1"/>
-                              <EmptySpace min="-2" pref="184" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jScrollPane1" alignment="1" pref="76" max="32767" attributes="1"/>
                       </Group>
+                      <EmptySpace min="-2" pref="184" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -198,6 +198,16 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Component class="javax.swing.JButton" name="jButton4">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jButton4.text"/>
+                <Property name="name" type="java.lang.String" value="jButton4" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+                <EventHandler event="caretPositionChanged" listener="java.awt.event.InputMethodListener" parameters="java.awt.event.InputMethodEvent" handler="addNewCalculation"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel3">
