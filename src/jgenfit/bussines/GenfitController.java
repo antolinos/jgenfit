@@ -160,5 +160,13 @@ public class GenfitController {
         this.experimentalSection =  section.getContent();
     }
 
+    public void removeCalculation(int experimentModelSelected) {                
+        SingleExperimentSection single = this.getSingleExperimentSection();
+        //System.out.println(this.experimentalSection);
+        single.removeExperimentByIndex(experimentModelSelected);
+        this.experimentalSection = single.getContent();
+        
+    }
+
     
 }

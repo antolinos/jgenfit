@@ -128,6 +128,30 @@ public class SingleExperimentSection {
     public String getContent() {
         return content;
     }
+
+    public void removeExperimentByIndex(int experimentModelSelected) {
+        StringBuilder sb = new StringBuilder();
+        List<String> lines = Arrays.asList(this.content.split("\n"));
+        
+        int calculationCount = -1;
+        for (String line : lines) {
+            if (line.contains(SINGLE_EXPERIMENT_SEPARATOR)){
+                calculationCount ++;
+            }
+            if (line.contains(END_OF_SECTION)){
+                calculationCount ++;
+                sb.append(line + "\n\n");
+                
+                this.content = sb.toString();
+                return;
+            }
+            if (calculationCount != experimentModelSelected){
+                sb.append(line + "\n");
+            }
+        }
+        
+        
+    }
     
     
     
