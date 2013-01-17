@@ -30,6 +30,7 @@ public class GenfitController {
     private String headerSection;
     private String modelList;
     private String experimentalSection;
+    private Integer maxpdb;
     
     /**
      * @return the genfitFile
@@ -47,18 +48,40 @@ public class GenfitController {
         this.modelList = this.genfitFile.getModelListText();
         this.experimentalSection = this.genfitFile.getExperimentalSectionText();
         
-        //System.out.println(this.experimentalSection);
+        this.maxpdb = AdvancedCommonParametersFile.getMaxPDB();
+        if (this.maxpdb != null){
+            this.setMaxPDB(maxpdb);
+        }
+
     }
+    
+    public void setMaxPDB(int maxpdb){
+        this.maxpdb = maxpdb;
+        ModelList models = new ModelList(this.modelList);
+        if (maxpdb > 0){
+           GenfitLogger.debug("maxPDB value: " + maxpdb); 
+           for (int i = 1; i < models.getModelNames().size(); i++){ 
+                GenfitModel model =  models.getModel(i, maxpdb);
+                this.save(i, model);
+           }
+        }
+        //GenfitLogger.debug(this.modelList);
+        //this.modelList = this.getModel
+    }
+    
     
     public SingleExperimentSection getSingleExperimentSection() {   
         return new SingleExperimentSection(this.experimentalSection);
     }
     
     public ModelList getModelList(){
-        return new ModelList(this.modelList);
-        //return new ModelList(this.genfitFile.getModelListText());
+        return new ModelList(this.modelList);      
     }
     
+     public GenfitModel getModel(int index){
+       return this.getModelList().getModel(index, this.maxpdb);    
+    }
+     
     public GeneralSection getGeneralSection(){
         return new GeneralSection(this.headerSection);
     }
@@ -90,11 +113,10 @@ public class GenfitController {
     public void save(int modelIndex, GenfitModel model){
         GenfitModel modelOld = this.getModelList().getModel(modelIndex);
         this.modelList = this.modelList.replace(modelOld.getContent(), model.getContent());
-       
     }
     
     public void save(Parameter parameter, int modelIndex, int submodelIndex){
-        GenfitModel model = this.getModelList().getModel(modelIndex);
+        GenfitModel model = this.getModelList().getModel(modelIndex, this.maxpdb);
         String modelContent = model.getContent().replace(model.getSubmodel(submodelIndex).toString(), parameter.toString());
         this.modelList = this.modelList.replace(model.toString(), modelContent);
     }

@@ -10,11 +10,13 @@
  */
 package jgenfit;
 
+import jgenfit.dialog.file.OpenJDialog;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 import jgenfit.bussines.experiment.GenfitModel;
+import jgenfit.dialog.file.PDBSelectorOpenJDialog;
 import jgenfit.events.GenfitEvent;
 import jgenfit.events.GenfitEventType;
 
@@ -86,11 +88,25 @@ public class EditModelDialog extends javax.swing.JDialog {
         jTable1.setColumnSelectionAllowed(true);
         jTable1.setName("jTable1"); // NOI18N
         jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jTable1MouseEntered(evt);
+            }
+        });
         jTable1.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+                jTable1CaretPositionChanged(evt);
             }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 jTable1InputMethodTextChanged(evt);
+            }
+        });
+        jTable1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jTable1PropertyChange(evt);
             }
         });
         jScrollPane1.setViewportView(jTable1);
@@ -201,7 +217,7 @@ public class EditModelDialog extends javax.swing.JDialog {
             String key = this.jTable1.getModel().getValueAt(i, 0).toString(); 
             String value = this.jTable1.getModel().getValueAt(i, 1).toString(); 
             
-            System.out.println(i + " Change: " + key + "  Value: " + value);
+          
             this.model.changeParameterByIndex(i, value);
         }     
         
@@ -212,9 +228,33 @@ public class EditModelDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
 private void jTable1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTable1InputMethodTextChanged
-    System.out.println("changed");
+    
 }//GEN-LAST:event_jTable1InputMethodTextChanged
 
+private void jTable1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseEntered
+    
+}//GEN-LAST:event_jTable1MouseEntered
+
+private void jTable1CaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTable1CaretPositionChanged
+ 
+}//GEN-LAST:event_jTable1CaretPositionChanged
+
+private void jTable1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTable1PropertyChange
+
+}//GEN-LAST:event_jTable1PropertyChange
+
+private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+
+    if (this.jTable1.getSelectedRow() > -1){
+        String key = this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 0).toString(); 
+        String value = this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 1).toString();
+        if (key.contains("PDB File ")){
+            PDBSelectorOpenJDialog openDialog = new PDBSelectorOpenJDialog(null, rootPaneCheckingEnabled, this.jTable1, this.jTable1.getSelectedRow());
+            openDialog.setVisible(true);
+       }
+}//GEN-LAST:event_jTable1MouseClicked
+
+    }
     public GenfitModel getModel(){
         return this.model;
         

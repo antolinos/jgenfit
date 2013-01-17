@@ -3,6 +3,8 @@
  */
 package jgenfit;
 
+import jgenfit.dialog.file.OpenJDialog;
+import jgenfit.dialog.file.EditFileJDialog;
 import jgenfit.settings.CompilerJDialog;
 import java.io.FileNotFoundException;
 import jgenfit.calculation.SccateringParametersJDialog;
@@ -21,14 +23,11 @@ import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Properties;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
@@ -40,6 +39,7 @@ import jgenfit.bussines.experiment.GeneralSection;
 import jgenfit.bussines.experiment.GenfitModel;
 import jgenfit.bussines.experiment.Parameter;
 import jgenfit.bussines.experiment.SingleExperiment;
+import jgenfit.dialog.file.AdvancedPropertiesEditFileJDialog;
 import jgenfit.events.GenfitEventListener;
 import jgenfit.settings.SettingsJDialog;
 import jgenfit.utils.GenfitLogger;
@@ -977,7 +977,8 @@ private void removeParameterRows(){
 private void fillParameters(){
     try{
         this.experimentModelSelectedingle = this.jTableModel.getSelectedRow();
-        GenfitModel model = this.genfitController.getModelList().getModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.experimentModelSelectedingle));
+        //GenfitModel model = this.genfitController.getModelList().getModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.experimentModelSelectedingle));
+        GenfitModel model = this.genfitController.getModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.experimentModelSelectedingle));
         this.removeParameterRows();
         DefaultTableModel tableSubModel = (DefaultTableModel) this.jTablesubModel.getModel();
 
@@ -1060,8 +1061,8 @@ private void jButtonScatteringParametersActionPerformed(java.awt.event.ActionEve
     /** EDIT MODEL **/
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        this.editModelDialog = new EditModelDialog(null, true);
-       System.out.println(this.genfitController.getModelList().getModel(this.getModelSelected()));
-       this.editModelDialog.setModel(this.genfitController.getModelList().getModel(this.getModelSelected()));
+       System.out.println(this.genfitController.getModel(this.getModelSelected()));
+       this.editModelDialog.setModel(this.genfitController.getModel(this.getModelSelected()));
        this.editModelDialog.genfitEvent.addListener(this);
        this.editModelDialog.setVisible(true);
         
@@ -1075,7 +1076,7 @@ private void jButtonScatteringParametersActionPerformed(java.awt.event.ActionEve
     }//GEN-LAST:event_onSaveAs
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        GenfitModel model = this.genfitController.getModelList().getModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.jTableModel.getSelectedRow()));
+        GenfitModel model = this.genfitController.getModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.jTableModel.getSelectedRow()));
         Parameter submodel = model.getSubmodel(this.subModelSelected);    
         this.submodelDialog = new SubmodelDialog(null, true);
         this.submodelDialog.genfitEvent.addListener(this);
@@ -1126,13 +1127,10 @@ private void onCompileFortranCode(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
 }//GEN-LAST:event_onCompileFortranCode
 
 private void onAdvancedCommonParameters(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdvancedCommonParameters
-  EditFileJDialog editFileJDialog = new EditFileJDialog(null, true);
-    
-   
+        AdvancedPropertiesEditFileJDialog editFileJDialog = new AdvancedPropertiesEditFileJDialog(null, true, this.genfitController);       
         try {
             String advancedFileName = GenfitPropertiesReader.readAdvancedCommonsSettingsfile();
             String sasPath = GenfitPropertiesReader.getGenfitFolder();
-
             File file = new File(sasPath);
             for (File child : file.listFiles()) {
                 if (child.getName().equals(advancedFileName)){
@@ -1144,6 +1142,7 @@ private void onAdvancedCommonParameters(java.awt.event.ActionEvent evt) {//GEN-F
         }
 
         editFileJDialog.setVisible(true);
+      
 }//GEN-LAST:event_onAdvancedCommonParameters
 
 private void onSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSave

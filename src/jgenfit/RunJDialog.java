@@ -10,6 +10,7 @@
  */
 package jgenfit;
 
+import jgenfit.dialog.file.EditFileSaveAsJDialog;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
