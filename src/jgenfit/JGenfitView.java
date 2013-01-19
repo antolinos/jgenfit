@@ -7,7 +7,7 @@ import jgenfit.dialog.file.OpenJDialog;
 import jgenfit.dialog.file.EditFileJDialog;
 import jgenfit.settings.CompilerJDialog;
 import java.io.FileNotFoundException;
-import jgenfit.calculation.SccateringParametersJDialog;
+import jgenfit.calculation.SccateringParametersDialog;
 import jgenfit.general.GeneralJDialog;
 import jgenfit.calculation.SingleExperimentJDialog;
 import java.util.logging.Level;
@@ -39,6 +39,7 @@ import jgenfit.bussines.experiment.GeneralSection;
 import jgenfit.bussines.experiment.GenfitModel;
 import jgenfit.bussines.experiment.Parameter;
 import jgenfit.bussines.experiment.SingleExperiment;
+import jgenfit.calculation.CurveParameterDialog;
 import jgenfit.dialog.file.AdvancedPropertiesEditFileJDialog;
 import jgenfit.events.GenfitEventListener;
 import jgenfit.settings.SettingsJDialog;
@@ -59,13 +60,14 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
     private GeneralJDialog generalDialog;
     private SettingsJDialog settingsJDialog;
     private SingleExperimentJDialog singleExperimentDialog;
-    private WeightParameterJDialog weightParameterDialog;
+    private WeightParameterDialog weightParameterDialog;
     private int experimentModelSelectedingle = -1;
-    private SccateringParametersJDialog scatteringParameterDialog;
+    private SccateringParametersDialog scatteringParameterDialog;
     private ModelListJDialog modelListDialog;
     private SubmodelDialog submodelDialog;
     private EditModelDialog editModelDialog;
     public File lastFile = null;
+    private CurveParameterDialog curveParametersDialog;
 
     public JGenfitView(SingleFrameApplication app) {
         super(app);
@@ -129,6 +131,16 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
             }
         });
         try {
+            /** Checking if SAS home has already been set **/
+            if (new File(GenfitPropertiesReader.getGenfitFolderAbsolutePath()).exists()){
+                GenfitLogger.info("SAS home set: " + GenfitPropertiesReader.getGenfitFolderAbsolutePath());
+            }
+            else{
+                GenfitLogger.info("SAS home doesn't exist ("+ GenfitPropertiesReader.getGenfitFolderAbsolutePath()+"). ");
+                /** we open the options window to set the parameter needed to open a file **/
+                this.onOptions(null);
+            }
+            
             String lastFilePath = GenfitPropertiesReader.readLastOpenedFile();            
             if (lastFilePath != null){
                     if (new File(lastFilePath).exists()){ 
@@ -279,7 +291,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jButtonScatteringParameters.setName("jButtonScatteringParameters"); // NOI18N
         jButtonScatteringParameters.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonScatteringParametersActionPerformed(evt);
+                onCurveParameters(evt);
             }
         });
 
@@ -287,7 +299,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jButtonEdit.setName("jButtonEdit"); // NOI18N
         jButtonEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEditActionPerformed(evt);
+                onEditScatteringCurve(evt);
             }
         });
 
@@ -317,14 +329,14 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jButton4.setName("jButton4"); // NOI18N
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                onAddScatteringCurve(evt);
             }
         });
         jButton4.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
                 addNewCalculation(evt);
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
 
@@ -365,10 +377,9 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButton4)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButton5)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED))
+                        .add(jButton5))
                     .add(jScrollPane1, 0, 0, Short.MAX_VALUE))
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(resourceMap.getColor("jPanel3.background")); // NOI18N
@@ -434,7 +445,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jButtonAddExperiment.setName("jButtonAddExperiment"); // NOI18N
         jButtonAddExperiment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAddExperimentActionPerformed(evt);
+                onAddModel(evt);
             }
         });
 
@@ -447,7 +458,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                onEditModel(evt);
             }
         });
 
@@ -455,7 +466,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jRemoveModel.setName("jRemoveModel"); // NOI18N
         jRemoveModel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRemoveModelActionPerformed(evt);
+                onRemoveModel(evt);
             }
         });
 
@@ -463,7 +474,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         jButton3.setName("jButton3"); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                onWeightParameters(evt);
             }
         });
 
@@ -500,7 +511,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
                     .add(jPanel3Layout.createSequentialGroup()
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 137, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.setBackground(resourceMap.getColor("jPanel5.background")); // NOI18N
@@ -566,6 +577,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         });
         jScrollPane3.setViewportView(jTablesubModel);
         jTablesubModel.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTablesubModel.getColumnModel().getColumn(0).setMinWidth(300);
         jTablesubModel.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("jTablesubModel.columnModel.title0")); // NOI18N
         jTablesubModel.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("jTablesubModel.columnModel.title1")); // NOI18N
         jTablesubModel.getColumnModel().getColumn(2).setHeaderValue(resourceMap.getString("jTablesubModel.columnModel.title2")); // NOI18N
@@ -581,7 +593,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         });
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                onEditModelParameter(evt);
             }
         });
 
@@ -604,8 +616,8 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jButton2)
-                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 118, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout mainPanelLayout = new org.jdesktop.layout.GroupLayout(mainPanel);
@@ -615,10 +627,10 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
             .add(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -629,7 +641,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
                 .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(1195, 1195, 1195))
+                .add(1154, 1154, 1154))
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -791,7 +803,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 805, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 801, Short.MAX_VALUE)
                 .add(statusAnimationLabel)
                 .addContainerGap())
             .add(statusPanelLayout.createSequentialGroup()
@@ -859,7 +871,7 @@ private void onOpen(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpen
     openJDialog.setGenfitFileController(this.genfitController);
     String sasFolder = null;
         try {
-            sasFolder = GenfitPropertiesReader.getGenfitFolder();
+            sasFolder = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(JGenfitView.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -895,16 +907,16 @@ private void onOpen(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpen
 }//GEN-LAST:event_onOpen
 
     /** Add new experiment **/
-private void jButtonAddExperimentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddExperimentActionPerformed
+private void onAddModel(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAddModel
     this.modelListDialog = new ModelListJDialog(null, true);
     modelListDialog.setModels(this.genfitController.getModelList());
     modelListDialog.genfitEvent.addListener(this);
     modelListDialog.setVisible(true);
 
-}//GEN-LAST:event_jButtonAddExperimentActionPerformed
+}//GEN-LAST:event_onAddModel
 
     /** Edit experiment **/
-private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
+private void onEditScatteringCurve(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditScatteringCurve
     this.singleExperimentDialog = new SingleExperimentJDialog(null, true);
     this.singleExperimentDialog.genfitEvent.addListener(this);
 
@@ -919,7 +931,7 @@ private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     
     
 
-}//GEN-LAST:event_jButtonEditActionPerformed
+}//GEN-LAST:event_onEditScatteringCurve
 
 private void jTableExperimentPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTableExperimentPropertyChange
     //System.out.println("Property changed");
@@ -931,7 +943,8 @@ private void jTableExperimentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-
     this.fillExperimentsModel();
     
     if (evt.getClickCount() == 2) {
-     this.jButtonEditActionPerformed(null);
+     //this.jButtonEditActionPerformed(null);
+     this.onEditScatteringCurve(null);
    }
 
 }//GEN-LAST:event_jTableExperimentMouseClicked
@@ -1034,39 +1047,43 @@ private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
     
 }//GEN-LAST:event_jButton1MouseClicked
 
-private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-    this.weightParameterDialog = new WeightParameterJDialog(null, true);
+private void onWeightParameters(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onWeightParameters
+    this.weightParameterDialog = new WeightParameterDialog(null, true);
     this.weightParameterDialog.setModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModels().get(this.experimentModelSelectedingle));
     this.weightParameterDialog.genfitEvent.addListener(this);
     this.weightParameterDialog.setVisible(true);
-}//GEN-LAST:event_jButton3ActionPerformed
+}//GEN-LAST:event_onWeightParameters
 
-private void jRemoveModelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRemoveModelActionPerformed
+private void onRemoveModel(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onRemoveModel
     int selectedExperimentModel = this.jTableModel.getSelectedRow();
     this.genfitController.removeExperimentModel(this.jTableExperiment.getSelectedRow(), selectedExperimentModel);
     this.fillExperimentTable(genfitController);
     this.fillExperimentsModel();
     this.jTableExperiment.setRowSelectionInterval(0, 0);
     save();
-}//GEN-LAST:event_jRemoveModelActionPerformed
+}//GEN-LAST:event_onRemoveModel
 
-private void jButtonScatteringParametersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonScatteringParametersActionPerformed
+private void onCurveParameters(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCurveParameters
     this.experimentModelSelected = this.jTableExperiment.getSelectedRow();
-    this.scatteringParameterDialog = new SccateringParametersJDialog(null, true);
+    /*this.scatteringParameterDialog = new SccateringParametersDialog(null, true);
     this.scatteringParameterDialog.genfitEvent.addListener(this);
     this.scatteringParameterDialog.setExperiment(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected));
-    this.scatteringParameterDialog.setVisible(true);
-}//GEN-LAST:event_jButtonScatteringParametersActionPerformed
+    this.scatteringParameterDialog.setVisible(true);*/
+    
+    this.curveParametersDialog = new CurveParameterDialog(null, true);
+    this.curveParametersDialog.genfitEvent.addListener(this);
+    this.curveParametersDialog.setExperiment(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected));
+    this.curveParametersDialog.setVisible(true);
+}//GEN-LAST:event_onCurveParameters
 
     /** EDIT MODEL **/
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void onEditModel(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditModel
        this.editModelDialog = new EditModelDialog(null, true);
-       System.out.println(this.genfitController.getModel(this.getModelSelected()));
        this.editModelDialog.setModel(this.genfitController.getModel(this.getModelSelected()));
        this.editModelDialog.genfitEvent.addListener(this);
        this.editModelDialog.setVisible(true);
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_onEditModel
 
     /** SAVE **/
     private void onSaveAs(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSaveAs
@@ -1075,14 +1092,14 @@ private void jButtonScatteringParametersActionPerformed(java.awt.event.ActionEve
         saveJDialog.setVisible(true);  
     }//GEN-LAST:event_onSaveAs
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void onEditModelParameter(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditModelParameter
         GenfitModel model = this.genfitController.getModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.jTableModel.getSelectedRow()));
         Parameter submodel = model.getSubmodel(this.subModelSelected);    
         this.submodelDialog = new SubmodelDialog(null, true);
         this.submodelDialog.genfitEvent.addListener(this);
         this.submodelDialog.setSubmodel(submodel);
         this.submodelDialog.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_onEditModelParameter
 
 private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
    
@@ -1105,7 +1122,7 @@ private void onAdvancedParamteres(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
    
         try {
             String advancedFileName = GenfitPropertiesReader.readAdvancedSettingsfile();
-            String sasPath = GenfitPropertiesReader.getGenfitFolder();
+            String sasPath = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
 
             File file = new File(sasPath);
             for (File child : file.listFiles()) {
@@ -1130,7 +1147,7 @@ private void onAdvancedCommonParameters(java.awt.event.ActionEvent evt) {//GEN-F
         AdvancedPropertiesEditFileJDialog editFileJDialog = new AdvancedPropertiesEditFileJDialog(null, true, this.genfitController);       
         try {
             String advancedFileName = GenfitPropertiesReader.readAdvancedCommonsSettingsfile();
-            String sasPath = GenfitPropertiesReader.getGenfitFolder();
+            String sasPath = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
             File file = new File(sasPath);
             for (File child : file.listFiles()) {
                 if (child.getName().equals(advancedFileName)){
@@ -1166,12 +1183,12 @@ private void addNewCalculation(java.awt.event.InputMethodEvent evt) {//GEN-FIRST
         this.fillParameters();*/
 }//GEN-LAST:event_addNewCalculation
 
-private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+private void onAddScatteringCurve(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAddScatteringCurve
         this.genfitController.addNewCalculation();
         this.fillExperimentTable(this.genfitController);
         this.fillExperimentsModel();
         this.fillParameters();
-}//GEN-LAST:event_jButton4ActionPerformed
+}//GEN-LAST:event_onAddScatteringCurve
 
 private void onRemoveCalculation(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onRemoveCalculation
         GenfitLogger.info("Remove calculation index: " + this.experimentModelSelected);
@@ -1270,7 +1287,7 @@ private void onRemoveCalculation(java.awt.event.ActionEvent evt) {//GEN-FIRST:ev
                 
                 break;
             case SCATTERING_PARAMETERS_SAVE:
-                SingleExperiment singleExperiment2 = this.scatteringParameterDialog.getExperiment();
+                SingleExperiment singleExperiment2 = this.curveParametersDialog.getExperiment();
                 genfitController.save(singleExperiment2, this.jTableExperiment.getSelectedRow());
                 break;
                 

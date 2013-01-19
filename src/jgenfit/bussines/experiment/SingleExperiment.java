@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import jgenfit.bussines.AdvancedCommonParametersFile;
 import jgenfit.bussines.experiment.ModelSingleExperiment;
 import jgenfit.utils.GenfitLogger;
 
@@ -27,6 +28,9 @@ public class SingleExperiment{
         private final String SCATERING_FLAG = "Experimental Scattering";
         private static String MODEL_SEPARATOR = "For each model copy and paste the next three lines";
         private static String END_OF_SECTION = " [End of section]";
+        private int FIRST_POSITION_SCATTERING_PARAM_INDEX = 140;
+        private int VALUE_LENGTH = 10;
+        private int TOTAL_LENGTH = 21;
         
         public SingleExperiment(String text) {
             this.content = text;                                  
@@ -45,7 +49,8 @@ public class SingleExperiment{
                 if (key.contains(SCATERING_FLAG)){
                     this.scatteringLine = parametersModelForExperiment.get(i);
                     value = this.parseScatteringCurveLineFile(parametersModelForExperiment.get(i));
-                    this.scatteringParameters = this.parseScatteringCurveLineParamters(parametersModelForExperiment.get(i));
+                    this.setScaterringLineSize(AdvancedCommonParametersFile.get_mxparexperiment());
+                    //this.scatteringParameters = this.parseScatteringCurveLineParameters(parametersModelForExperiment.get(i));
                 }                
                 
                 parameters.put(key, value);
@@ -181,21 +186,21 @@ public class SingleExperiment{
                 return line.substring(40, 140);
         }
         
-        private List<String> parseScatteringCurveLineParamters(String line){
-            while (line.length() < 400){
-                line = line + " ";
-            }            
+        private List<String> parseScatteringCurveLineParameters(String line){
+          
             this.scatteringParameters = new ArrayList<String>();
+            
             /** First index of param position **/
-            int paramIndex = 140;            
-            for (int i = 0; i < 12; i++) {
-                if (line.length() > paramIndex){
+            GenfitLogger.debug("mxparexp: " + AdvancedCommonParametersFile.get_mxparexperiment());
+            int position = FIRST_POSITION_SCATTERING_PARAM_INDEX;
+            for (int i = 0; i < AdvancedCommonParametersFile.get_mxparexperiment(); i++) {
+                if (line.length() > position){
                     /** name **/
-                    String value = line.substring(paramIndex, paramIndex + 11);
+                    String value = line.substring(position, position + VALUE_LENGTH + 1);
                     /** value **/
-                    String key = line.substring(paramIndex + 10, paramIndex + 21);
+                    String key = line.substring(position + VALUE_LENGTH, position + 21);
                     //System.out.println("Value: " + value.replace(" ", "|") + "   Key: " + key.replace(" ", "*"));
-                    paramIndex = paramIndex + 21;                    
+                    position = position + TOTAL_LENGTH;                    
                     //values.put(value, key);
                     this.getScatteringParameters().add(value + " = " + key);
                 }
@@ -313,22 +318,58 @@ public class SingleExperiment{
             return scatteringParameters;
         }
 
-        public String getScatteringParametersValue(int index) {            
-            return Arrays.asList(this.getScatteringParameters().get(index).split("=")).get(1).trim();
+        public String getScatteringParametersValue(int index) {   
+            //if (index >= this.getScatteringParameters().size()){
+                /** mxparexp is bigger than the actual number of parameters **/
+             //   this.setScaterringLineSize(AdvancedCommonParametersFile.get_mxparexperiment());  
+            //}
+           
+                return Arrays.asList(this.getScatteringParameters().get(index).split("=")).get(1).trim();
+            
         }
         
-        public String getScatteringParametersKey(int index) {         
+        /** Set the lengeth of the scattering curve line in function of the index **/
+        private void setScaterringLineSize(int index) {  
+                int size = this.scatteringLine.length();
+                int new_size = FIRST_POSITION_SCATTERING_PARAM_INDEX + (TOTAL_LENGTH * (index +2));
+                GenfitLogger.debug("Actual: " + size + "  Desired:" + new_size); 
+                String newScatteringLine = this.scatteringLine;
+                for (int i = newScatteringLine.length(); i < new_size; i++) {
+                    newScatteringLine = newScatteringLine + " ";
+                }
+                 GenfitLogger.debug("Updated: " + newScatteringLine.length() ); 
+                this.content.replace(this.scatteringLine, newScatteringLine);
+                this.scatteringLine = newScatteringLine;
+                this.parseScatteringCurveLineParameters(this.scatteringLine);
+                GenfitLogger.debug(String.valueOf(this.getScatteringParameters()));
+        }
+        
+        public String getScatteringParametersKey(int index) {  
+            /*if (index >= this.getScatteringParameters().size()){
+                /** mxparexp is bigger than the actual number of parameters **/
+               //this.setScaterringLineSize(AdvancedCommonParametersFile.get_mxparexperiment());                            
+           // }
+            GenfitLogger.debug("Index: " + index + " Size:" + this.getScatteringParameters().size() );
             return Arrays.asList(this.getScatteringParameters().get(index).split("=")).get(0).trim();
         }
         
         
         public void setScatteringCurveParameters(List<String> parameters){
-            int start = 141;
-            String aux = this.scatteringLine;
+            int start = FIRST_POSITION_SCATTERING_PARAM_INDEX + 1;
             
-            while (this.scatteringLine.length() < 400){
+            String scatteringLineOld = new String();
+            List<String> lines = Arrays.asList(this.getContent().split("\n"));
+            for (String line : lines) {
+                if (line.contains(" Experimental Scattering Curve.........:")){
+                    scatteringLineOld = line;
+                }
+            }
+            
+            this.setScaterringLineSize(AdvancedCommonParametersFile.get_mxparexperiment());
+            
+            /*while (this.scatteringLine.length() < 400){
                 this.scatteringLine = this.scatteringLine.concat(" ");
-            }            
+            }   */         
             
             for (int i = 0; i < parameters.size(); i++) {
                 String key = Arrays.asList(parameters.get(i).split("=")).get(0);
@@ -340,7 +381,7 @@ public class SingleExperiment{
         
             //System.out.println("Antiguo: " + aux);
             //System.out.println("Replace: " + this.scatteringLine);
-            this.content = this.getContent().replace(aux, this.scatteringLine);                                
+            this.content = this.getContent().replace(scatteringLineOld, this.scatteringLine);                                
         }        
         
           private String setScatteringParameter(String line, int start, int end, String value){              

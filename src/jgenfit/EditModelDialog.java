@@ -97,11 +97,11 @@ public class EditModelDialog extends javax.swing.JDialog {
             }
         });
         jTable1.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-                jTable1CaretPositionChanged(evt);
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 jTable1InputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+                jTable1CaretPositionChanged(evt);
             }
         });
         jTable1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -143,7 +143,7 @@ public class EditModelDialog extends javax.swing.JDialog {
             .add(jPanel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(jPanel1Layout.createSequentialGroup()
                 .add(20, 20, 20)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 735, Short.MAX_VALUE)
                 .add(20, 20, 20))
         );
         jPanel1Layout.setVerticalGroup(
@@ -180,7 +180,7 @@ public class EditModelDialog extends javax.swing.JDialog {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
-                        .add(jButton1)
+                        .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 73, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(jButton2)))
                 .addContainerGap())
@@ -211,7 +211,7 @@ public class EditModelDialog extends javax.swing.JDialog {
             jTable1.getCellEditor().stopCellEditing();
         }   
         
-        System.out.println("----------------------");
+        
         for (int i = 0; i < rowsCount; i++){
             //System.out.println( this.jTable1.getModel().getValueAt(i, 1).toString());    
             String key = this.jTable1.getModel().getValueAt(i, 0).toString(); 
@@ -247,7 +247,6 @@ private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
 
     if (this.jTable1.getSelectedRow() > -1){
         String key = this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 0).toString(); 
-        String value = this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 1).toString();
         if (key.contains("PDB File ")){
             PDBSelectorOpenJDialog openDialog = new PDBSelectorOpenJDialog(null, rootPaneCheckingEnabled, this.jTable1, this.jTable1.getSelectedRow());
             openDialog.setVisible(true);
@@ -303,6 +302,14 @@ private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
         });
     }
     
+    private void cleanTable(){
+     DefaultTableModel tableSubModel = (DefaultTableModel) this.jTable1.getModel();
+
+        while (tableSubModel.getRowCount() != 0) {
+            tableSubModel.removeRow(0);
+        }
+    }
+    
     public void setModel(GenfitModel model){
         this.model = model;
         
@@ -318,12 +325,8 @@ private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
         List<String> parameters = model.getModelFields();
         
     
-         DefaultTableModel tableSubModel = (DefaultTableModel) this.jTable1.getModel();
-
-        while (tableSubModel.getRowCount() != 0) {
-            tableSubModel.removeRow(0);
-        }
-   
+       this.cleanTable();
+        DefaultTableModel tableSubModel = (DefaultTableModel) this.jTable1.getModel();
      
         for (int i = 0; i < parameters.size(); i++){
             if(!parameters.get(i).trim().equalsIgnoreCase("")){

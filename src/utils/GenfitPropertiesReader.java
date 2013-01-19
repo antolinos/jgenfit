@@ -74,7 +74,7 @@ public class GenfitPropertiesReader {
            GenfitPropertiesReader.writeParameter("genfitfolder", value);
     }
     
-    public static String getGenfitFolder() throws FileNotFoundException, IOException {
+    public static String getGenfitFolderAbsolutePath() throws FileNotFoundException, IOException {
          return  GenfitPropertiesReader.readParameter("genfitfolder");
     }
     

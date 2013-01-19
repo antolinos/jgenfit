@@ -22,6 +22,6 @@ public class AdvancedPropertiesEditFileJDialog extends EditFileJDialog {
    
     public void onAfterSaved(){
         System.out.println("After saved");
-        this.genfitController.setMaxPDB(AdvancedCommonParametersFile.getMaxPDB());
+        this.genfitController.setMaxPDB(AdvancedCommonParametersFile.get_maxpdb());
     }
 }

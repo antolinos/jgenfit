@@ -48,7 +48,7 @@ public class GenfitController {
         this.modelList = this.genfitFile.getModelListText();
         this.experimentalSection = this.genfitFile.getExperimentalSectionText();
         
-        this.maxpdb = AdvancedCommonParametersFile.getMaxPDB();
+        this.maxpdb = AdvancedCommonParametersFile.get_maxpdb();
         if (this.maxpdb != null){
             this.setMaxPDB(maxpdb);
         }

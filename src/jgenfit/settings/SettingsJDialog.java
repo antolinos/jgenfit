@@ -44,7 +44,7 @@ public class SettingsJDialog extends javax.swing.JDialog implements GenfitEventL
          
         try {
             //prop.load(new FileInputStream("settings.properties"));
-            this.jTextFieldGenfitFolder.setText(GenfitPropertiesReader.getGenfitFolder()); //prop.getProperty("genfitfolder"));
+            this.jTextFieldGenfitFolder.setText(GenfitPropertiesReader.getGenfitFolderAbsolutePath()); //prop.getProperty("genfitfolder"));
             this.jTextFieldOutputFolder.setText(GenfitPropertiesReader.getOutputFolder()); //prop.getProperty("outputfolder"));
             this.jTextFieldGNU.setText(GenfitPropertiesReader.getGNUPlot());//  prop.getProperty("gnuplot"));
         } catch (IOException e) {

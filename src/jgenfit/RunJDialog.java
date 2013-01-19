@@ -65,7 +65,7 @@ public class RunJDialog extends javax.swing.JDialog implements GenfitEventListen
             this.jTextFieldOutputFolder.setText(prop.getProperty("outputfolder"));
             this.gnuPlotFilePath =  prop.getProperty("gnuplot");
             */
-            this.jTextFieldGenfitFolder.setText(GenfitPropertiesReader.getGenfitFolder());
+            this.jTextFieldGenfitFolder.setText(GenfitPropertiesReader.getGenfitFolderAbsolutePath());
             this.jTextFieldInputCode.setText(GenfitPropertiesReader.getInputCode());
             this.jTextFieldOutputFolder.setText(GenfitPropertiesReader.getOutputFolder());
             this.gnuPlotFilePath = GenfitPropertiesReader.getGNUPlot();
@@ -662,7 +662,7 @@ private void jButtonRUNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
         String sasFolder;
         try {
-            sasFolder = GenfitPropertiesReader.getGenfitFolder();
+            sasFolder = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
             if (new File(sasFolder).exists()){
                 select.setSelectedFile(new File(sasFolder));
             }
@@ -777,7 +777,7 @@ private void jButtonRUNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         
         String sasFolder;
         try {
-            sasFolder = GenfitPropertiesReader.getGenfitFolder();
+            sasFolder = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
             
             if (new File(sasFolder).exists()){
                 select.setSelectedFile(new File(sasFolder));
@@ -808,7 +808,7 @@ private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         select.setEvent(GenfitEventType.GENFIT_PARAMETER_SELECTED);
          String sasFolder;
         try {
-            sasFolder = GenfitPropertiesReader.getGenfitFolder();
+            sasFolder = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
             
             if (new File(sasFolder).exists()){
                 select.setSelectedFile(new File(sasFolder));
@@ -837,7 +837,7 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         select.genfitEvent.addListener(this);
         String sasFolder;
         try {
-            sasFolder = GenfitPropertiesReader.getGenfitFolder();
+            sasFolder = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
             if (new File(sasFolder).exists()){
                 select.setSelectedFile(new File(sasFolder));
             }

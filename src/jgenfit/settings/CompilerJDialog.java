@@ -110,24 +110,24 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             ProcessBuilder pb;
             if (OSDetector.isMac() || OSDetector.isUnix()){
                 //pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "\\lxgen", "2");
-                pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getMacCompilerCommand(), "2");
+                pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolderAbsolutePath() + "/" + GenfitPropertiesReader.getMacCompilerCommand(), "2");
                 //Check if it is executable
-                File file = new File(GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getMacCompilerCommand());
+                File file = new File(GenfitPropertiesReader.getGenfitFolderAbsolutePath() + "/" + GenfitPropertiesReader.getMacCompilerCommand());
                 if (file.exists()){
                     if (!file.canExecute()){
-                        System.out.println("It seems that the file is not an executable: " + GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getMacCompilerCommand());
+                        System.out.println("It seems that the file is not an executable: " + GenfitPropertiesReader.getGenfitFolderAbsolutePath() + "/" + GenfitPropertiesReader.getMacCompilerCommand());
                     }
                 }
                 else{
-                    System.out.println("File doesn't exit: " + GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getMacCompilerCommand());
+                    System.out.println("File doesn't exit: " + GenfitPropertiesReader.getGenfitFolderAbsolutePath() + "/" + GenfitPropertiesReader.getMacCompilerCommand());
                 }
             }
             else{
                  //pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "\\pcgen.bat", "2");
-                pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolder() + "/" + GenfitPropertiesReader.getWindowsCompilerCommand(), "2");
+                pb = new ProcessBuilder(GenfitPropertiesReader.getGenfitFolderAbsolutePath() + "/" + GenfitPropertiesReader.getWindowsCompilerCommand(), "2");
             }
 
-             File folder = new File(GenfitPropertiesReader.getGenfitFolder());
+             File folder = new File(GenfitPropertiesReader.getGenfitFolderAbsolutePath());
              
              if (folder.exists()){               
                  pb.directory(folder);                

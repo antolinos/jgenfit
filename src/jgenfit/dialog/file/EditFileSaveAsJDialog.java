@@ -136,7 +136,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
                 String sasFolder;
                 try {
-                    sasFolder = GenfitPropertiesReader.getGenfitFolder();
+                    sasFolder = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
                     if (new File(sasFolder).exists()){
                         fc.setSelectedFile(new File(sasFolder));
                     }

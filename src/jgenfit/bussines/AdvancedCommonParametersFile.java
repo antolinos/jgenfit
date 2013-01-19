@@ -25,14 +25,20 @@ import utils.GenfitPropertiesReader;
 public class AdvancedCommonParametersFile{
     private static File getFile() throws FileNotFoundException, IOException{
             String advancedFileName = GenfitPropertiesReader.readAdvancedCommonsSettingsfile();
-            String sasPath = GenfitPropertiesReader.getGenfitFolder();
+            String sasPath = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
 
             File file = new File(sasPath);
-            for (File child : file.listFiles()) {
-                if (child.getName().equals(advancedFileName)){
-                    return child;
+            if (file.exists()){
+                for (File child : file.listFiles()) {
+                    if (child.getName().equals(advancedFileName)){
+                        return child;
+                    }
                 }
             }
+            else{
+                GenfitLogger.error(sasPath + " doesn't exist or not set yet");
+            }
+            GenfitLogger.error(advancedFileName + " not found. Go to Settings/Options and set a SAS home path");
             return null;
     }
     
@@ -55,11 +61,13 @@ public class AdvancedCommonParametersFile{
         return null;
     }
     
-    public static int getMaxPDB(){
-        String content = AdvancedCommonParametersFile.getContent();
+ 
+    
+    private static int getParameter(String key){
+      String content = AdvancedCommonParametersFile.getContent();
         List<String> lines = Arrays.asList(content.split("\n"));
         for (String line : lines) {
-            if (line.contains("mxpdb")){
+            if (line.contains(key)){
                 try{
                     return Integer.parseInt(line.subSequence(30, line.length()).toString());
                 }
@@ -69,6 +77,17 @@ public class AdvancedCommonParametersFile{
             }            
         }        
         return -1;
+    
+    }
+    
+    
+
+    public static int get_mxparexperiment() {
+         return getParameter("mxparexp");
+    }
+    
+       public static int get_maxpdb(){
+        return getParameter("mxpdb");
     }
     
   }
