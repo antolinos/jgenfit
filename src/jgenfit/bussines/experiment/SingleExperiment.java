@@ -33,6 +33,7 @@ public class SingleExperiment{
         private int TOTAL_LENGTH = 21;
         
         public SingleExperiment(String text) {
+          
             this.content = text;                                  
             /** Reading parameters **/
             List<String> parametersModelForExperiment = Arrays.asList(Arrays.asList(text.split(MODEL_SEPARATOR)).get(0).split("\n"));
