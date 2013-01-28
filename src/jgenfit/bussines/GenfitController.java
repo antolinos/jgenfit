@@ -105,7 +105,7 @@ public class GenfitController {
         SingleExperimentSection experiment = this.getSingleExperimentSection();
         SingleExperiment experimentModel = experiment.getExperiments().get(singleExperiment);
         String aux = experimentModel.getContent();
-         
+        
         experimentModel.saveModelSingleExperiment(modelSingleExperimentIndex, model);
         this.experimentalSection = this.experimentalSection.replace(aux, experimentModel.getContent());
     }

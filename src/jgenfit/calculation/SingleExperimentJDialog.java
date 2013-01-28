@@ -10,6 +10,11 @@
  */
 package jgenfit.calculation;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jgenfit.SelectFileJDialog;
 import jgenfit.SelectFolderJDialog;
 import jgenfit.bussines.experiment.SingleExperimentSection;
@@ -17,6 +22,7 @@ import jgenfit.bussines.experiment.SingleExperiment;
 import jgenfit.events.GenfitEvent;
 import jgenfit.events.GenfitEventListener;
 import jgenfit.events.GenfitEventType;
+import utils.GenfitPropertiesReader;
 
 /**
  *
@@ -696,14 +702,14 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, 0, 704, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
                         .add(526, 526, 526)
                         .add(jbuttonOK)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonCancel))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, 0, 671, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -874,9 +880,37 @@ private void jbuttonOKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:e
     }//GEN-LAST:event_jCheckBoxRadialaverageActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        SelectFileJDialog select = new SelectFileJDialog(null, true);
+        SelectFileJDialog select = new SelectFileJDialog(null, true);              
         select.setEvent(GenfitEventType.SCATERING_FILE_SELECTED);
         select.genfitEvent.addListener(this);
+        
+        if (this.jTextFieldScatteringCurveFile.getText() != null){
+            if (new File(this.jTextFieldScatteringCurveFile.getText()).exists()){
+                select.setSelectedFile(new File(this.jTextFieldScatteringCurveFile.getText()));
+            }
+            else{
+                try {
+                    String genfitFolderAbsolutePath = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
+                    select.setSelectedFile(new File(genfitFolderAbsolutePath));
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(SingleExperimentJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(SingleExperimentJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        else{
+                try {
+                    String genfitFolderAbsolutePath = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
+                    select.setSelectedFile(new File(genfitFolderAbsolutePath));
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(SingleExperimentJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(SingleExperimentJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        
+        }
+        
         select.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

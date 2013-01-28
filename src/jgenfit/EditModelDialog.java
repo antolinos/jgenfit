@@ -10,6 +10,11 @@
  */
 package jgenfit;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jgenfit.dialog.file.OpenJDialog;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +24,8 @@ import jgenfit.bussines.experiment.GenfitModel;
 import jgenfit.dialog.file.PDBSelectorOpenJDialog;
 import jgenfit.events.GenfitEvent;
 import jgenfit.events.GenfitEventType;
+import jgenfit.utils.GenfitLogger;
+import utils.GenfitPropertiesReader;
 
 /**
  *
@@ -27,6 +34,7 @@ import jgenfit.events.GenfitEventType;
 public class EditModelDialog extends javax.swing.JDialog {
     private GenfitModel model;
     public GenfitEvent genfitEvent;
+    public String lastOpenefile = null;
 
     /** Creates new form EditModelDialog */
     public EditModelDialog(java.awt.Frame parent, boolean modal) {
@@ -247,8 +255,34 @@ private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
 
     if (this.jTable1.getSelectedRow() > -1){
         String key = this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 0).toString(); 
+        String value = this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 1).toString(); 
         if (key.contains("PDB File ")){
             PDBSelectorOpenJDialog openDialog = new PDBSelectorOpenJDialog(null, rootPaneCheckingEnabled, this.jTable1, this.jTable1.getSelectedRow());
+            openDialog.setEditModelDialog(this);
+            if (new File(value).exists()){
+                openDialog.setSelectedFile(new File(value));
+            }
+            else{
+                GenfitLogger.debug("Last open file: " + this.lastOpenefile);
+                if (this.lastOpenefile != null){
+                    if (new File(this.lastOpenefile).exists()){
+                        openDialog.setSelectedFile(new File(this.lastOpenefile));
+                    }
+                }            
+                else{
+                    String path;
+                        try {
+                            path = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
+                             if (new File(path).exists()){
+                               openDialog.setSelectedFile(new File(path));
+                             }
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(EditModelDialog.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(EditModelDialog.class.getName()).log(Level.SEVERE, null, ex);
+                        }                                    
+                }
+            }
             openDialog.setVisible(true);
        }
 }//GEN-LAST:event_jTable1MouseClicked

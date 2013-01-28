@@ -1267,7 +1267,7 @@ private void onRemoveCalculation(java.awt.event.ActionEvent evt) {//GEN-FIRST:ev
     
     
     public void handleGenfitEvent(GenfitEvent e) {               
-        
+        GenfitLogger.debug("EVENT: " + e.getType() );
        // System.out.println("A.- " + this.experimentModelSelected);
         switch (e.getType()) {
             case GENERAL_SAVE:
