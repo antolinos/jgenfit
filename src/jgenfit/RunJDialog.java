@@ -36,6 +36,7 @@ import jgenfit.bussines.experiment.GeneralSection;
 import jgenfit.events.GenfitEvent;
 import jgenfit.events.GenfitEventListener;
 import jgenfit.events.GenfitEventType;
+import jgenfit.utils.GenfitLogger;
 import jgenfit.utils.OutputDisplayer;
 import utils.GenfitPropertiesReader;
 import utils.OSDetector;
@@ -65,6 +66,9 @@ public class RunJDialog extends javax.swing.JDialog implements GenfitEventListen
             this.jTextFieldOutputFolder.setText(prop.getProperty("outputfolder"));
             this.gnuPlotFilePath =  prop.getProperty("gnuplot");
             */
+           
+            
+            
             this.jTextFieldGenfitFolder.setText(GenfitPropertiesReader.getGenfitFolderAbsolutePath());
             this.jTextFieldInputCode.setText(GenfitPropertiesReader.getInputCode());
             this.jTextFieldOutputFolder.setText(GenfitPropertiesReader.getOutputFolder());
@@ -1011,5 +1015,7 @@ private void jButtonRUN1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     void setController(GenfitController genfitController) {
         this.genfitController = genfitController;
         this.setTitle("RUN " + this.genfitController.getGenfitFile().getAbsolutePath());
+        GenfitLogger.info(this.genfitController.getGenfitFile().getName().replace("gen", "").replace(".dat", ""));
+        this.jTextFieldInputCode.setText(this.genfitController.getGenfitFile().getName().replace("gen", "").replace(".dat", ""));
     }
 }
