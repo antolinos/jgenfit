@@ -83,17 +83,17 @@ public class SelectFileJDialog extends javax.swing.JDialog {
         System.err.println("Cancel");
     }
     else{
-        if (this.jFileChooser1.getSelectedFile() != null){
-           
+        if (this.jFileChooser1.getSelectedFile() != null){           
                 File file = this.jFileChooser1.getSelectedFile();
                 this.genfitEvent.filePath = file.getAbsolutePath();
+                this.genfitEvent.fire();
         }
         else{
             System.err.println("Selected file: null");
         }
        
     }
-    this.genfitEvent.fire();
+   
     this.setVisible(false);
     }//GEN-LAST:event_jFileChooser1ActionPerformed
 

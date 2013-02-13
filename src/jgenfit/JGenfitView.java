@@ -3,6 +3,8 @@
  */
 package jgenfit;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import jgenfit.dialog.file.OpenJDialog;
 import jgenfit.dialog.file.EditFileJDialog;
 import jgenfit.settings.CompilerJDialog;
@@ -24,12 +26,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.Timer;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
@@ -74,6 +80,9 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
 
         initComponents();
 
+      
+       
+        
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
@@ -131,6 +140,10 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
             }
         });
         try {
+           /* Image icon = Toolkit.getDefaultToolkit().getImage("C:/Users/demariaa/jgenfit/src/images/splash.jpg"); // specify the correct url path here
+		
+        
+             this.getFrame().setIconImage(icon);*/
             /** Checking if SAS home has already been set **/
             if (new File(GenfitPropertiesReader.getGenfitFolderAbsolutePath()).exists()){
                 GenfitLogger.info("SAS home set: " + GenfitPropertiesReader.getGenfitFolderAbsolutePath());
@@ -333,10 +346,10 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
             }
         });
         jButton4.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
                 addNewCalculation(evt);
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
 
@@ -511,7 +524,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
                     .add(jPanel3Layout.createSequentialGroup()
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 137, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         jPanel5.setBackground(resourceMap.getColor("jPanel5.background")); // NOI18N
@@ -630,7 +643,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
                     .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -803,13 +816,13 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 801, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 805, Short.MAX_VALUE)
                 .add(statusAnimationLabel)
                 .addContainerGap())
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jLabelFilePath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 784, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .add(jLabelFilePath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 586, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(229, Short.MAX_VALUE))
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)

@@ -880,18 +880,35 @@ private void jbuttonOKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:e
     }//GEN-LAST:event_jCheckBoxRadialaverageActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        /** It can happen that the field is already filled in. So, there are 3 options:
+         * 1.- Empty
+         * 2.- Absolute Path
+         * 3.- Relative path to the genfit_sas home: jgui_examples/curve.dat
+         */
+        
         SelectFileJDialog select = new SelectFileJDialog(null, true);              
         select.setEvent(GenfitEventType.SCATERING_FILE_SELECTED);
         select.genfitEvent.addListener(this);
         
         if (this.jTextFieldScatteringCurveFile.getText() != null){
+            /** This is case 2 **/
             if (new File(this.jTextFieldScatteringCurveFile.getText()).exists()){
                 select.setSelectedFile(new File(this.jTextFieldScatteringCurveFile.getText()));
             }
             else{
                 try {
                     String genfitFolderAbsolutePath = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
-                    select.setSelectedFile(new File(genfitFolderAbsolutePath));
+                    
+                    /** This is case 3 **/
+                    if (new File(genfitFolderAbsolutePath + "/" + this.jTextFieldScatteringCurveFile.getText()).exists()){
+                        select.setSelectedFile(new File(genfitFolderAbsolutePath + "/" + this.jTextFieldScatteringCurveFile.getText()));
+                    }
+                    else{
+                        /** Case 1 **/
+                        select.setSelectedFile(new File(genfitFolderAbsolutePath));
+                    }
+                    
+                    
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(SingleExperimentJDialog.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
