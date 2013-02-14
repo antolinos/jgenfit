@@ -1102,6 +1102,7 @@ private void onCurveParameters(java.awt.event.ActionEvent evt) {//GEN-FIRST:even
     private void onSaveAs(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSaveAs
         SaveJDialog saveJDialog = new SaveJDialog(null, true);
         saveJDialog.setGenfitFileController(this.genfitController);
+        saveJDialog.setFilePath(this.lastFile.getAbsolutePath());
         saveJDialog.setVisible(true);  
     }//GEN-LAST:event_onSaveAs
 

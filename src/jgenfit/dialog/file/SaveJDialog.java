@@ -13,6 +13,7 @@ package jgenfit;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import jgenfit.bussines.GenfitController;
 import jgenfit.bussines.GenfitFile;
 import jgenfit.utils.GenfitLogger;
@@ -78,6 +79,9 @@ public void setGenfitFileController(GenfitController genfitController){
     this.genfitController = genfitController;
 }
 
+public void setFilePath(String path){
+    this.jFileChooser1.setSelectedFile(new File(path));
+}
 
 private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser1ActionPerformed
 
@@ -91,8 +95,17 @@ private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                     if (this.genfitController != null){
                         //this.genfitController.setGenfitFile(new GenfitFile(this.jFileChooser1.getSelectedFile().getAbsolutePath()));
                         try {
-                            this.genfitController.save(this.jFileChooser1.getSelectedFile().getAbsolutePath());                           
-                            GenfitPropertiesReader.setLastOpenedFile(this.jFileChooser1.getSelectedFile().getAbsolutePath());
+                            if ((this.jFileChooser1.getSelectedFile().getName().length() == 11) && (this.jFileChooser1.getSelectedFile().getName().startsWith("gen") && this.jFileChooser1.getSelectedFile().getName().endsWith(".dat"))){
+                                this.genfitController.save(this.jFileChooser1.getSelectedFile().getAbsolutePath());                           
+                                GenfitPropertiesReader.setLastOpenedFile(this.jFileChooser1.getSelectedFile().getAbsolutePath());
+                            }
+                            else{                                
+                                JOptionPane.showMessageDialog(null,
+                                    "File name is not correct. It should be named as genXXXX.dat where XXXX is the run number",
+                                    "Warning",
+                                    JOptionPane.WARNING_MESSAGE);
+                                return;                            
+                            }
                         } catch (Exception ex) {
                             Logger.getLogger(SaveJDialog.class.getName()).log(Level.SEVERE, null, ex);
                         }
