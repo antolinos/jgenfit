@@ -140,10 +140,12 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
             }
         });
         try {
-           /* Image icon = Toolkit.getDefaultToolkit().getImage("C:/Users/demariaa/jgenfit/src/images/splash.jpg"); // specify the correct url path here
-		
-        
-             this.getFrame().setIconImage(icon);*/
+            
+            
+           String pathToImageSortBy = "jgenfit/resources/busyicons/splash.jpg";
+            ImageIcon SortByIcon = new ImageIcon(getClass().getClassLoader().getResource(pathToImageSortBy));
+            
+             this.getFrame().setIconImage(SortByIcon.getImage());
             /** Checking if SAS home has already been set **/
             if (new File(GenfitPropertiesReader.getGenfitFolderAbsolutePath()).exists()){
                 GenfitLogger.info("SAS home set: " + GenfitPropertiesReader.getGenfitFolderAbsolutePath());
