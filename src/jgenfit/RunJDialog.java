@@ -618,7 +618,8 @@ private void run(String galloCommandOSName) {
                 ProcessBuilder pb = new ProcessBuilder(command);                
                 OutputDisplayer displayer = new OutputDisplayer(jTextArea1);
                 displayer.commence(pb.start());
-
+               
+                
                 GenfitPropertiesReader.setGenfitFolder(inputFolder);
                 GenfitPropertiesReader.setInputCode(inputCode);
                 GenfitPropertiesReader.setOutputFolder(outputFolder);

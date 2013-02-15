@@ -11,6 +11,7 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import jgenfit.bussines.experiment.GeneralSection;
 import jgenfit.bussines.experiment.GenfitModel;
 import jgenfit.bussines.experiment.ModelList;
@@ -129,10 +130,11 @@ public class GenfitController {
         //this.experimentalSection = this.getSingleExperimentSection().getContent().replace(this.getSingleExperimentSection().getExperiments().get(0).getContent(), singleExperiment.getContent());        
         //this.experimentalSection = this.getSingleExperimentSection().getContent().replace(oldExperiment, newExperiment);                               
         StringBuilder newExperimentalSection = new StringBuilder();
-        newExperimentalSection.append(this.getSingleExperimentSection().getHeader());
-        
+        SingleExperimentSection singleSection = this.getSingleExperimentSection();
+        newExperimentalSection.append(singleSection.getHeader());
+        List<SingleExperiment> experiments = singleSection.getExperiments();
         int aux = 0;
-        for (SingleExperiment singleExperiment : this.getSingleExperimentSection().getExperiments()) {
+        for (SingleExperiment singleExperiment : experiments) {
             //System.out.append(singleExperiment1.getContent());
             if (aux == index){
                  newExperimentalSection.append(singleExperimentUpdated.getContent());

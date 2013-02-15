@@ -26,6 +26,7 @@ import utils.GenfitPropertiesReader;
 public class SaveJDialog extends javax.swing.JDialog {
 
     GenfitController genfitController;
+    private JGenfitView genfitView;
     /** Creates new form OpenJDialog */
     public SaveJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -98,6 +99,10 @@ private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                             if ((this.jFileChooser1.getSelectedFile().getName().length() == 11) && (this.jFileChooser1.getSelectedFile().getName().startsWith("gen") && this.jFileChooser1.getSelectedFile().getName().endsWith(".dat"))){
                                 this.genfitController.save(this.jFileChooser1.getSelectedFile().getAbsolutePath());                           
                                 GenfitPropertiesReader.setLastOpenedFile(this.jFileChooser1.getSelectedFile().getAbsolutePath());
+                                
+                                if (this.genfitView != null){
+                                    this.genfitView.setStatusBarLabel("File saved " + this.jFileChooser1.getSelectedFile().getAbsolutePath());
+                                }
                             }
                             else{                                
                                 JOptionPane.showMessageDialog(null,
@@ -173,4 +178,8 @@ private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser jFileChooser1;
     // End of variables declaration//GEN-END:variables
+
+    void setGenfitView(JGenfitView aThis) {
+        this.genfitView = aThis;
+    }
 }

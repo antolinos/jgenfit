@@ -85,10 +85,7 @@ public class SingleExperimentSection {
                StringBuilder singleSectionExperiment = new StringBuilder();
                for (String line : lines) {
                    if (line.contains(SINGLE_EXPERIMENT_SEPARATOR)){
-                    if (singleSectionExperiment.length() == 0){
-                    //    System.out.println("================ FIRST NEW");    
-                    }
-                    else{
+                    if (singleSectionExperiment.length() != 0){                   
                       //  System.out.println("================ ADDING");
                         this.experiments.add(new SingleExperiment(singleSectionExperiment.toString()));  
                         singleSectionExperiment = new StringBuilder();

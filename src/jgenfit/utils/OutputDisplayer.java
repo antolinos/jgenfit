@@ -17,6 +17,7 @@ import java.io.Reader;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 import jgenfit.MessageJDialog;
@@ -50,11 +51,16 @@ public void run() {
         while ((line = br.readLine()) != null){
             System.out.println(line);
             buffer.append(line + "\n");            
-            setText(buffer.toString());
+            //setText(buffer.toString());
         }
-           MessageJDialog m = new MessageJDialog(null, true);
-           m.setMessage("Execution has been finished successfully");
-           m.setVisible(true);
+        
+           
+            JOptionPane.showMessageDialog(null,
+                                    "Execution has been finished successfully",
+                                    "Genfit",
+                                    JOptionPane.INFORMATION_MESSAGE);
+            
+            
        /* String message = "Execution has been finished successfully";
         String header = "";
         JFrame frame = new JFrame();

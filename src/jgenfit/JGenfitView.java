@@ -5,6 +5,7 @@ package jgenfit;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import jgenfit.bussines.experiment.ModelList;
 import jgenfit.dialog.file.OpenJDialog;
 import jgenfit.dialog.file.EditFileJDialog;
 import jgenfit.settings.CompilerJDialog;
@@ -146,6 +147,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
             ImageIcon SortByIcon = new ImageIcon(getClass().getClassLoader().getResource(pathToImageSortBy));
             
              this.getFrame().setIconImage(SortByIcon.getImage());
+             this.getFrame().setTitle("Genfit");
             /** Checking if SAS home has already been set **/
             if (new File(GenfitPropertiesReader.getGenfitFolderAbsolutePath()).exists()){
                 GenfitLogger.info("SAS home set: " + GenfitPropertiesReader.getGenfitFolderAbsolutePath());
@@ -173,7 +175,7 @@ public class JGenfitView extends FrameView implements GenfitEventListener {
         }
     }
 
-  private void setStatusBarLabel(String message){
+  public void setStatusBarLabel(String message){
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         
@@ -868,8 +870,9 @@ private void RemoveExperimentTableRows(){
         this.RemoveExperimentTableRows();
         DefaultTableModel tableModel = (DefaultTableModel) this.jTableExperiment.getModel();
         
+        List<SingleExperiment> experiments = singleExperimentSection.getExperiments();
         for (int i = 0; i < singleExperimentSection.getSingleExperimentCount(); i++) {
-            SingleExperiment singleExperiment = singleExperimentSection.getExperiments().get(i);                        
+            SingleExperiment singleExperiment = experiments.get(i);                        
             tableModel.addRow(new Object[]{singleExperiment.getModelsNumber(), singleExperiment.getExperimentalScatteringCurve(), singleExperiment.getDescription()});
         }        
         if (this.experimentModelSelected != -1){
@@ -934,10 +937,11 @@ private void onAddModel(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdd
 private void onEditScatteringCurve(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditScatteringCurve
     this.singleExperimentDialog = new SingleExperimentJDialog(null, true);
     this.singleExperimentDialog.genfitEvent.addListener(this);
-
+    
+    List<SingleExperiment> experiments = this.genfitController.getSingleExperimentSection().getExperiments();
    if (this.jTableExperiment.getSelectedRow() != -1){
-        this.singleExperimentDialog.setSingleExperiment(this.genfitController.getSingleExperimentSection().getExperiments().get(this.jTableExperiment.getSelectedRow()));
-        this.singleExperimentDialog.setTitle(this.genfitController.getSingleExperimentSection().getExperiments().get(this.jTableExperiment.getSelectedRow()).getDescription());
+        this.singleExperimentDialog.setSingleExperiment(experiments.get(this.jTableExperiment.getSelectedRow()));
+        this.singleExperimentDialog.setTitle(experiments.get(this.jTableExperiment.getSelectedRow()).getDescription());
         this.singleExperimentDialog.setVisible(true);
    }
    else{
@@ -974,8 +978,11 @@ private void removeExperimentModelRows(){
 
     private void fillExperimentsModel() {
         GenfitLogger.info("Model selected on UI: " + this.experimentModelSelected);
+        
+        ModelList modelList = this.genfitController.getModelList();
+        List<SingleExperiment> experiments = this.genfitController.getSingleExperimentSection().getExperiments();
         if (this.experimentModelSelected != -1){
-            List<String> models = this.genfitController.getModelList().getModelName(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber());
+            List<String> models = modelList.getModelName(experiments.get(this.experimentModelSelected).getModelsNumber());
             DefaultTableModel tableModel = (DefaultTableModel) this.jTableModel.getModel();
             this.removeExperimentModelRows();
             for (int i = 0; i < models.size(); i++) {
@@ -1104,8 +1111,11 @@ private void onCurveParameters(java.awt.event.ActionEvent evt) {//GEN-FIRST:even
     private void onSaveAs(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSaveAs
         SaveJDialog saveJDialog = new SaveJDialog(null, true);
         saveJDialog.setGenfitFileController(this.genfitController);
+        saveJDialog.setGenfitView(this);
+        
         saveJDialog.setFilePath(this.lastFile.getAbsolutePath());
         saveJDialog.setVisible(true);  
+       
     }//GEN-LAST:event_onSaveAs
 
     private void onEditModelParameter(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditModelParameter

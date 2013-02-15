@@ -51,7 +51,7 @@ public class SingleExperiment{
                     this.scatteringLine = parametersModelForExperiment.get(i);
                     value = this.parseScatteringCurveLineFile(parametersModelForExperiment.get(i));
                     this.setScaterringLineSize(AdvancedCommonParametersFile.get_mxparexperiment());
-                    //this.scatteringParameters = this.parseScatteringCurveLineParameters(parametersModelForExperiment.get(i));
+                    
                 }                
                 
                 parameters.put(key, value);
@@ -87,15 +87,8 @@ public class SingleExperiment{
                     br.append(lines.get(i)).append("\n");                
                 }                
                 else{
-                    if (((index * 3)<= modelCounterLines && modelCounterLines < ((index*3) + 3))){
-                       
-                        if (newModelLinesIndex != 2){
-                            br.append(Arrays.asList(model.getContent().split("\n")).get(newModelLinesIndex)).append("\n");
-                        }
-                        else{
-                            br.append(Arrays.asList(model.getContent().split("\n")).get(newModelLinesIndex)).append("\n");
-                        }
-                        
+                    if (((index * 3)<= modelCounterLines && modelCounterLines < ((index*3) + 3))){                       
+                        br.append(Arrays.asList(model.getContent().split("\n")).get(newModelLinesIndex)).append("\n");
                         newModelLinesIndex++;
                     }
                     else{
@@ -192,7 +185,7 @@ public class SingleExperiment{
             this.scatteringParameters = new ArrayList<String>();
             
             /** First index of param position **/
-            GenfitLogger.debug("mxparexp: " + AdvancedCommonParametersFile.get_mxparexperiment());
+            //GenfitLogger.debug("mxparexp: " + AdvancedCommonParametersFile.get_mxparexperiment());
             int position = FIRST_POSITION_SCATTERING_PARAM_INDEX;
             for (int i = 0; i < AdvancedCommonParametersFile.get_mxparexperiment(); i++) {
                 if (line.length() > position){

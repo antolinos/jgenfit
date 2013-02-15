@@ -83,13 +83,15 @@ public class GenfitFile extends File {
     }
     
     
-    public String getModelListText(){        
-        return this.getContent().substring(this.getContent().indexOf("MODEL LIST #############"));    
+    public String getModelListText(){   
+        String content = this.getContent();
+        return content.substring(content.indexOf("MODEL LIST #############"));    
     }
     
     
     public String getHeaderSection(){
-        return this.getContent().substring(this.getContent().indexOf(" GENERAL SECTION"), this.getContent().indexOf(" SINGLE EXPERIMENT SECTION"));    
+         String content = this.getContent();
+        return content.substring(content.indexOf(" GENERAL SECTION"), this.getContent().indexOf(" SINGLE EXPERIMENT SECTION"));    
     }
 
     
