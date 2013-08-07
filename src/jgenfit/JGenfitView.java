@@ -914,13 +914,15 @@ private void onOpen(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpen
     
     this.lastFile = this.genfitController.getGenfitFile();
     
-    this.setStatusBarLabel("File loaded: " + this.lastFile.getAbsolutePath());
-    this.fillExperimentTable(this.genfitController);
+    if (this.lastFile.getAbsolutePath() != null){
+        this.setStatusBarLabel("File loaded: " + this.lastFile.getAbsolutePath());
+        this.fillExperimentTable(this.genfitController);
 
-    if (jTableExperiment.getRowCount() > 0){
-        this.jTableExperiment.setRowSelectionInterval(0, 0);
-        this.experimentModelSelected = 0;        
-        this.fillExperimentsModel();
+        if (jTableExperiment.getRowCount() > 0){
+            this.jTableExperiment.setRowSelectionInterval(0, 0);
+            this.experimentModelSelected = 0;        
+            this.fillExperimentsModel();
+        }
     }
 }//GEN-LAST:event_onOpen
 
@@ -982,7 +984,9 @@ private void removeExperimentModelRows(){
         ModelList modelList = this.genfitController.getModelList();
         List<SingleExperiment> experiments = this.genfitController.getSingleExperimentSection().getExperiments();
         if (this.experimentModelSelected != -1){
+            GenfitLogger.debug("Models " + experiments.get(this.experimentModelSelected).getModelsNumber());
             List<String> models = modelList.getModelName(experiments.get(this.experimentModelSelected).getModelsNumber());
+            GenfitLogger.debug("Models: " + models);
             DefaultTableModel tableModel = (DefaultTableModel) this.jTableModel.getModel();
             this.removeExperimentModelRows();
             for (int i = 0; i < models.size(); i++) {
@@ -1013,6 +1017,10 @@ private void fillParameters(){
     try{
         this.experimentModelSelectedingle = this.jTableModel.getSelectedRow();
         //GenfitModel model = this.genfitController.getModelList().getModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.experimentModelSelectedingle));
+        GenfitLogger.debug("Models Number: "  + this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().toString());
+        GenfitLogger.debug(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).toString());
+        GenfitLogger.debug(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().toString());
+        
         GenfitModel model = this.genfitController.getModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.experimentModelSelectedingle));
         this.removeParameterRows();
         DefaultTableModel tableSubModel = (DefaultTableModel) this.jTablesubModel.getModel();
@@ -1071,7 +1079,10 @@ private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 
 private void onWeightParameters(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onWeightParameters
     this.weightParameterDialog = new WeightParameterDialog(null, true);
+    
+    //int modelNumbering = this.genfitController.getModelList().getModelNumberingByIndex(this.experimentModelSelectedingle);
     this.weightParameterDialog.setModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModels().get(this.experimentModelSelectedingle));
+    //this.weightParameterDialog.setModel(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModels().get(modelNumbering));
     this.weightParameterDialog.genfitEvent.addListener(this);
     this.weightParameterDialog.setVisible(true);
 }//GEN-LAST:event_onWeightParameters
@@ -1288,12 +1299,14 @@ private void onRemoveCalculation(java.awt.event.ActionEvent evt) {//GEN-FIRST:ev
 
     //
     public int getModelSelected(){
+//        int modelNumbering = this.genfitController.getModelList().getModelNumberingByIndex(modelSelected);
+        //return this.genfitController.getModelList().getModelNumberingByIndex(this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.jTableModel.getSelectedRow()));
         return this.genfitController.getSingleExperimentSection().getExperiments().get(this.experimentModelSelected).getModelsNumber().get(this.jTableModel.getSelectedRow());
     }
     
     
     public void handleGenfitEvent(GenfitEvent e) {               
-        GenfitLogger.debug("EVENT: " + e.getType() );
+        //GenfitLogger.debug("EVENT: " + e.getType() );
        // System.out.println("A.- " + this.experimentModelSelected);
         switch (e.getType()) {
             case GENERAL_SAVE:
@@ -1319,8 +1332,15 @@ private void onRemoveCalculation(java.awt.event.ActionEvent evt) {//GEN-FIRST:ev
                 
             case ADD_NEW_EXPERIMENT_MODEL:
                 int modelSelected = this.modelListDialog.getModelSelected();
+                
+                //GenfitLogger.debug("ADD_NEW_EXPERIMENT_MODEL: " + this.genfitController.getModelList().modelIndexList);
+                GenfitLogger.debug("ADD_NEW_EXPERIMENT_MODEL modelSelected: " + modelSelected);
+                int modelNumbering = this.genfitController.getModelList().getModelNumberingByIndex(modelSelected);
+                GenfitLogger.debug("ADD_NEW_EXPERIMENT_MODEL: " + modelNumbering);
+                
                 SingleExperiment single = this.genfitController.getSingleExperimentSection().getExperiments().get(this.jTableExperiment.getSelectedRow());                
-                single.addNewModel(modelSelected);    
+                //single.addNewModel(modelSelected);
+                single.addNewModel(modelNumbering);
                 genfitController.save(single, this.jTableExperiment.getSelectedRow());
 
                 break;
@@ -1330,7 +1350,9 @@ private void onRemoveCalculation(java.awt.event.ActionEvent evt) {//GEN-FIRST:ev
                 break;
             
             case SAVE_EXPERIMENT_MODEL:
-                this.genfitController.save(this.getModelSelected(), this.editModelDialog.getModel());
+                int numbering = this.genfitController.getModelList().modelIndexList.get(this.getModelSelected());
+                 this.genfitController.save(numbering, this.editModelDialog.getModel());
+               //this.genfitController.save(this.getModelSelected(), this.editModelDialog.getModel());
                 break;
                 
             default:

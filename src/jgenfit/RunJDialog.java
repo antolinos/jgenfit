@@ -108,6 +108,7 @@ public class RunJDialog extends javax.swing.JDialog implements GenfitEventListen
             File outpuFolderFile = this.getOutputFolder();
             File[] listOfFiles = outpuFolderFile.listFiles();
             
+           
             Arrays.sort(listOfFiles, new Comparator<File>(){
                     public int compare(File f1, File f2)
                     {

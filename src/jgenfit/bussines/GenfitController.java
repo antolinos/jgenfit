@@ -60,10 +60,17 @@ public class GenfitController {
         this.maxpdb = maxpdb;
         ModelList models = new ModelList(this.modelList);
         if (maxpdb > 0){
-           GenfitLogger.debug("maxPDB value: " + maxpdb); 
+           //GenfitLogger.debug("maxPDB value: " + maxpdb); 
            for (int i = 1; i < models.getModelNames().size(); i++){ 
-                GenfitModel model =  models.getModel(i, maxpdb);
-                this.save(i, model);
+                //GenfitModel model =  models.getModel(i, maxpdb);
+              
+              int numberingModel = models.getModelNumberingByIndex(i);
+               
+               GenfitModel model =  models.getModel(numberingModel, maxpdb);
+               this.save(i, model);
+                        
+                //GenfitModel model =  models.getModel(models.modelIndexList.get(i), maxpdb);
+                //this.save(i, model);
            }
         }
         //GenfitLogger.debug(this.modelList);
@@ -71,7 +78,8 @@ public class GenfitController {
     }
     
     
-    public SingleExperimentSection getSingleExperimentSection() {   
+    public SingleExperimentSection getSingleExperimentSection() { 
+        //System.out.println(new SingleExperimentSection(this.experimentalSection).getContent());
         return new SingleExperimentSection(this.experimentalSection);
     }
     
@@ -97,7 +105,7 @@ public class GenfitController {
     
      public void addExperimentModel(int singleExperiment){
        SingleExperimentSection experiment = this.getSingleExperimentSection();
-       SingleExperiment experimentModel = experiment.getExperiments().get(singleExperiment);
+       //SingleExperiment experimentModel = experiment.getExperiments().get(singleExperiment);
       // System.out.println(experimentModel.getContent());
        
     }

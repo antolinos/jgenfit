@@ -18,12 +18,15 @@ import jgenfit.utils.GenfitLogger;
 public class ModelList {
 
     private ArrayList<String> modelNames = new ArrayList<String>();
+    public HashMap<Integer, Integer> modelIndexList = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> linesNumberOfModels;
     private final String content;
     
     public ModelList(String content){
         this.content = content;
         this.parseContent(content);
+        
+ 
     }
     
     private void parseContent(String content){
@@ -38,7 +41,8 @@ public class ModelList {
             if ((lines.get(i - 1 ).trim().contains("9-polydisperse"))){
                    //System.out.println("----- " + lines.get(i));
                    indexLinePreviousModelFound = i;
-                   getModelNames().add(lines.get(i));
+                   //getModelNames().add(lines.get(i));
+                   addModelName(lines.get(i));
                    modelsCount++;
                    
                    linesNumberOfModels.put(modelsCount, i); 
@@ -48,7 +52,8 @@ public class ModelList {
             /** model with parameter or PDB **/
             if ((lines.get(i - 2 ).trim().isEmpty())&&(lines.get(i).trim().isEmpty())&&!(lines.get(i - 1).trim().isEmpty())){                   
                    indexLinePreviousModelFound = i - 1;
-                   getModelNames().add(lines.get(i - 1));
+                   //getModelNames().add(lines.get(i - 1));
+                   addModelName(lines.get(i - 1));
                    modelsCount++;
                    linesNumberOfModels.put(modelsCount, i - 1); 
                    continue;
@@ -58,15 +63,22 @@ public class ModelList {
             if ((!lines.get(i - 1 ).contains("..."))&&(lines.get(i - 2 ).trim().isEmpty())&&(!lines.get(i).trim().isEmpty())&&(i - indexLinePreviousModelFound > 3) &&!(lines.get(i - 1).trim().isEmpty())){
                    //System.out.println("----- " + lines.get(i - 1));
                    indexLinePreviousModelFound = i - 1;
-                   getModelNames().add(lines.get(i - 1));
+                   //getModelNames().add(lines.get(i - 1));
+                   addModelName(lines.get(i - 1));
                    modelsCount++;
                    linesNumberOfModels.put(modelsCount, i - 1); 
                    continue;
             }
         }
-        
-        //GenfitLogger.debug("Number of models detected " + linesNumberOfModels.size());
-        
+      
+    }
+    
+    private void addModelName(String line) {
+        getModelNames().add(line);
+        /** Getting model's index **/
+        String index = line.substring(0, 5).replaceAll( "[^\\d]", "" );
+        modelIndexList.put(Integer.parseInt(index), (getModelNames().size()));
+        //modelIndexList.put(String.valueOf(getModelNames().size() - 1), index);
     }
     
      private String removePDBLines(StringBuilder result, int linesToRemove, int totalPDB) {
@@ -93,8 +105,7 @@ public class ModelList {
     private String addPDBLines(int linesToAdd, int maxpdb){
         //GenfitLogger.debug("Add:" + linesToAdd);
         String result = "";
-         for (int i = maxpdb - linesToAdd + 1; i <= maxpdb; i++) {
-             
+         for (int i = maxpdb - linesToAdd + 1; i <= maxpdb; i++) {             
               result = result + (getNewPDBLine(i));
          }
          return result;
@@ -208,7 +219,10 @@ public class ModelList {
     }
     
     public GenfitModel getModel(int modelIndex, int maxpdb){
-        return new GenfitModel(this.getModelText(modelIndex, maxpdb));
+        GenfitLogger.debug("getModel: " + modelIndex);
+         GenfitLogger.debug("getModel: " + modelIndexList);
+        //return new GenfitModel(this.getModelText(modelIndex, maxpdb));
+        return new GenfitModel(this.getModelText(modelIndexList.get(modelIndex), maxpdb));
     }
     
       public GenfitModel getModel(int modelIndex){
@@ -217,13 +231,21 @@ public class ModelList {
     
     /** modelIndex starting from 1 **/
     public String getModelName(int modelIndex){
+        GenfitLogger.debug("model Number:" +modelIndex );
         return this.getModelNames().get(modelIndex - 1);
     }
     
     public List<String> getModelName(List<Integer> modelIndex){
+        //GenfitLogger.debug("-----------------------------");
+        // GenfitLogger.debug("modelIndex:" +modelIndex );
+        //GenfitLogger.debug(modelIndex.toString());
          List<String> modelsNames = new ArrayList<String>();
          for (int index : modelIndex) {
-             modelsNames.add(this.getModelName(index));
+          //   GenfitLogger.debug(String.valueOf(index));
+             GenfitLogger.debug("s: " + modelIndexList.toString());
+             GenfitLogger.debug(String.valueOf(index).toString());
+          
+             modelsNames.add(this.getModelName(modelIndexList.get(index)));
          }
         return modelsNames;
     }
@@ -233,6 +255,19 @@ public class ModelList {
      */
     public ArrayList<String> getModelNames() {
         return modelNames;
+    }
+
+   
+     
+    public Integer getModelNumberingByIndex(int i) {
+         for (Integer numberingModel : this.modelIndexList.keySet()) {
+                   GenfitLogger.debug("Numbering:" + numberingModel + " " + this.modelIndexList.get(numberingModel) );
+                   if (this.modelIndexList.get(numberingModel).equals(i)){
+                       return numberingModel;
+                   }
+           }
+         GenfitLogger.debug("Model not found " + i );
+         return null;
     }
 
   
