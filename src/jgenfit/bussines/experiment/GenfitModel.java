@@ -58,8 +58,9 @@ import jgenfit.utils.GenfitLogger;
                                        [-Starting-|---Lower--|---Upper--|Flag|Kind|---Grid---|Lower Int-|Upper Int-|Lower Par1|Upper Par1|Lower Par1|Upper Par1|Lower Par2|Upper Par2|Lower Par3|Upper Par3|Lower Par4|Upper Par4|Lower Par5|Upper Par5|Lower Par6|Upper Par6|Lower Par7|Upper Par7|Lower Par8|Upper Par8|Lower Par9|Upper Par9|Lower Pa10|Upper Pa10|Link-Func. Par. 1-(up to 300 characters) ...
  Outer Radius (Angs.) .................: 500.          0.           600.  5    if (mm.eq.1) then; r1+d1 ;else if (mm.eq.2) then; r2+d2 ; endif        */
         public void parse(String content){
-          //GenfitLogger.debug(content);
+          //GenfitLogger.debug("content:" + content);
           List<String> lines = Arrays.asList(this.content.split("\n"));
+          
           this.setTitle(lines.get(0));
           int parameter_header_found = -1;
           for (int i = 0; i < lines.size(); i++) {
@@ -72,7 +73,8 @@ import jgenfit.utils.GenfitLogger;
               this.getModelFields().add(lines.get(i));
           }
 
-            for (int i = parameter_header_found + 2; i < lines.size(); i++) {   
+            for (int i = parameter_header_found + 2; i < lines.size(); i++) { 
+                    //GenfitLogger.debug("Parameter:" + lines.get(i));
                     parameters.add(new Parameter(lines.get(i), this)); 
                     this.subModelsName.add(lines.get(i).substring(0, 40));
             } 

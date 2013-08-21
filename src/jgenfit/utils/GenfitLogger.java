@@ -18,7 +18,7 @@ public class GenfitLogger {
     }
      
     public static void debug(String message){
-        //System.out.println("[DEBUG] " + message);
+        System.out.println("[DEBUG] " + message);
     }
       
     public static void error(String message){

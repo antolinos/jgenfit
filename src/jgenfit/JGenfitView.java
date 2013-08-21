@@ -1025,7 +1025,9 @@ private void fillParameters(){
         this.removeParameterRows();
         DefaultTableModel tableSubModel = (DefaultTableModel) this.jTablesubModel.getModel();
 
+        GenfitLogger.debug("Submodels: "  + model.getSubmodelsText());
         for (int i = 0; i < model.getSubmodelsText().size(); i++) {
+            
             tableSubModel.addRow(new Object[]{model.getSubmodelsText().get(i).replace(".", "").replace(":", ""), model.getSubmodel(i).getStarting(), model.getSubmodel(i).getLower(), model.getSubmodel(i).getUpper(), model.getSubmodel(i).getFlag()});
         }
      }
