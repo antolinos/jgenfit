@@ -73,16 +73,24 @@ public class Parameter {
     
     public String getLowerParameter(int index){
         int startLower = 116 + (22 * (index - 1)); 
-         if (startLower + 10 > this.content.length()){
+         if (startLower > this.content.length()){
              return "";
+         }
+         
+         if (startLower + 10 > this.content.length()){
+             return this.content.substring(startLower, this.content.length()).trim(); 
          }
         return this.content.substring(startLower, startLower + 10).trim();        
     }
     
     public String getUpperParameter(int index){
         int startUpper = 117 + (22 * (index - 1)) + 10;  
-        if (startUpper + 10 > this.content.length()){
+        if (startUpper > this.content.length()){
              return "";
+        }
+        
+         if (startUpper + 10 > this.content.length()){
+              return this.content.substring(startUpper, this.content.length()).trim(); 
          }
         return this.content.substring(startUpper, startUpper + 10).trim();        
     }

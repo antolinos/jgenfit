@@ -1615,6 +1615,8 @@ public void handleGenfitEvent(GenfitEvent e) {
         }
         if (flag.equals("6") || flag.equals("7")) {
             /** Populating lower parameter **/
+            this.submodel.getLowerParameter(2);
+            this.submodel.getUpperParameter(2);
             this.jTextFieldLower1.setText(this.submodel.getLowerParameter(1));
             this.jTextFieldLower2.setText(this.submodel.getLowerParameter(2));
             this.jTextFieldLower3.setText(this.submodel.getLowerParameter(3));
