@@ -266,8 +266,7 @@ public class SingleExperiment{
         
         
         public void setParam(String key_param, String value){
-            for (String key : this.parameters.keySet()) {
-                //System.out.println("key " + key);
+            for (String key : this.parameters.keySet()) {                
                 if (key.contains(key_param)){
                     this.parameters.put(key_param, value);
                     this.changeParamContent(key, value);

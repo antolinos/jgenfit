@@ -64,18 +64,22 @@ public class AdvancedCommonParametersFile{
  
     
     private static int getParameter(String key){
-      String content = AdvancedCommonParametersFile.getContent();
-        List<String> lines = Arrays.asList(content.split("\n"));
-        for (String line : lines) {
-            if (line.contains(key)){
-                try{
-                    return Integer.parseInt(line.subSequence(30, line.length()).toString());
-                }
-                catch(Exception e){
-                    GenfitLogger.error("Reading maxPDB");
-                }
-            }            
-        }        
+        String content = AdvancedCommonParametersFile.getContent();   
+        if (content != null){
+            List<String> lines = Arrays.asList(content.split("\n"));
+            if (lines != null){
+                for (String line : lines) {
+                    if (line.contains(key)){
+                        try{
+                            return Integer.parseInt(line.subSequence(30, line.length()).toString());
+                        }
+                        catch(Exception e){
+                            GenfitLogger.error("Reading maxPDB");
+                        }
+                    }            
+                }        
+            }
+        }
         return -1;
     
     }

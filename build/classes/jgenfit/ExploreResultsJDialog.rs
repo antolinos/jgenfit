@@ -1,0 +1,2 @@
+jgenfit.ExploreResultsJDialog
+jgenfit.MyRunnableGnuPlot
