@@ -1185,7 +1185,7 @@ private void onCompileFortranCode(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
 private void onAdvancedCommonParameters(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdvancedCommonParameters
         AdvancedPropertiesEditFileJDialog editFileJDialog = new AdvancedPropertiesEditFileJDialog(null, true, this.genfitController);       
         try {
-            String advancedFileName = GenfitPropertiesReader.readAdvancedCommonsSettingsfile();
+            String advancedFileName = GenfitPropertiesReader.readAdvancedCommonsSettingsfile();            
             String sasPath = GenfitPropertiesReader.getGenfitFolderAbsolutePath();
             File file = new File(sasPath);
             for (File child : file.listFiles()) {

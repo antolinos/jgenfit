@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jgenfit.FunctionEditorJDialog;
 import jgenfit.SelectFileJDialog;
 import jgenfit.SelectFolderJDialog;
 import jgenfit.bussines.experiment.SingleExperimentSection;
@@ -31,7 +32,7 @@ import utils.GenfitPropertiesReader;
 public class SingleExperimentJDialog extends javax.swing.JDialog implements GenfitEventListener {
     public SingleExperiment singleExperiment;
     public GenfitEvent genfitEvent;
-
+    private FunctionEditorJDialog editor;
     /** Creates new form SingleExperimentJDialog */
     public SingleExperimentJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -70,9 +71,14 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
         jComboBackGround = new javax.swing.JComboBox();
+        jLabel25 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextFieldBackgroundFunction = new javax.swing.JTextArea();
+        Edit = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jCheckBoxCollimation = new javax.swing.JCheckBox();
         jTextFieldNumberOPointsForTheConvolution = new javax.swing.JTextField();
@@ -129,7 +135,7 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(jgenfit.JGenfitApp.class).getContext().getResourceMap(SingleExperimentJDialog.class);
         jPanel1.setBackground(resourceMap.getColor("jPanel1.background")); // NOI18N
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(-16777216,true)));
         jPanel1.setName("jPanel1"); // NOI18N
 
         jLabel1.setFont(jLabel1.getFont().deriveFont((float)10));
@@ -212,10 +218,6 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
 
-        jLabel11.setFont(jLabel11.getFont().deriveFont((float)10));
-        jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
-        jLabel11.setName("jLabel11"); // NOI18N
-
         jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -224,13 +226,75 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
             }
         });
 
-        jComboBackGround.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "1", "2", "3" }));
+        jPanel5.setBackground(resourceMap.getColor("jPanel5.background")); // NOI18N
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jPanel5.border.title"))); // NOI18N
+        jPanel5.setName("jPanel5"); // NOI18N
+
+        jLabel11.setFont(jLabel11.getFont().deriveFont((float)10));
+        jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
+        jLabel11.setName("jLabel11"); // NOI18N
+
+        jComboBackGround.setBackground(resourceMap.getColor("jComboBackGround.background")); // NOI18N
+        jComboBackGround.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "1", "2", "3", "4", "5" }));
         jComboBackGround.setName("jComboBackGround"); // NOI18N
         jComboBackGround.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBackGroundActionPerformed(evt);
             }
         });
+
+        jLabel25.setFont(jLabel25.getFont().deriveFont((float)10));
+        jLabel25.setText(resourceMap.getString("jLabel25.text")); // NOI18N
+        jLabel25.setName("jLabel25"); // NOI18N
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        jTextFieldBackgroundFunction.setColumns(20);
+        jTextFieldBackgroundFunction.setRows(5);
+        jTextFieldBackgroundFunction.setName("jTextFieldBackgroundFunction"); // NOI18N
+        jScrollPane1.setViewportView(jTextFieldBackgroundFunction);
+
+        Edit.setText(resourceMap.getString("Edit.text")); // NOI18N
+        Edit.setName("Edit"); // NOI18N
+        Edit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                EditMouseClicked(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .add(18, 18, 18)
+                .add(jLabel11)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jComboBackGround, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 51, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(27, 27, 27)
+                .add(jLabel25)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 409, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(18, 18, 18)
+                .add(Edit, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jComboBackGround, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jLabel11)
+                            .add(jLabel25)))
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 54, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(Edit)))
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -239,40 +303,45 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel3)
-                    .add(jLabelScattering)
-                    .add(jLabel1)
-                    .add(jLabel4)
-                    .add(jLabel5)
-                    .add(jLabel6)
-                    .add(jLabel7))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel1Layout.createSequentialGroup()
-                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldNumberOfQPointsToAverage)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldMaximumDistanceFopCalculation)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldFixedRelErrOnTheFirstPoint)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldMinimumQInDataFile, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
-                            .add(jTextFieldExponentAlphaOfPowerLaw))
-                        .add(81, 81, 81)
-                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(jLabel9)
-                            .add(jLabel8)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel10)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel11))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                            .add(jComboBackGround, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(jTextFieldMaximumQInDataFile, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
-                            .add(jTextFieldNumberOfLinesToSkip)
-                            .add(jTextFieldScalingFactor)))
-                    .add(jTextFieldDescription, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 349, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel3)
+                            .add(jLabelScattering)
+                            .add(jLabel1)
+                            .add(jLabel4)
+                            .add(jLabel5)
+                            .add(jLabel6))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jPanel1Layout.createSequentialGroup()
+                                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldNumberOfQPointsToAverage)
+                                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldMaximumDistanceFopCalculation)
+                                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldFixedRelErrOnTheFirstPoint)
+                                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldMinimumQInDataFile, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE))
+                                .add(81, 81, 81)
+                                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                                        .add(jLabel9)
+                                        .add(jLabel8)
+                                        .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel10))
+                                    .add(jLabel7))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jTextFieldExponentAlphaOfPowerLaw, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 86, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                        .add(jTextFieldMaximumQInDataFile, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
+                                        .add(jTextFieldNumberOfLinesToSkip, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
+                                        .add(jTextFieldScalingFactor, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE))))
+                            .add(jTextFieldDescription, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 349, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jPanel1Layout.createSequentialGroup()
+                                .add(jTextFieldScatteringCurveFile, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 274, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(jButton1)))
+                        .add(276, 276, 276))
                     .add(jPanel1Layout.createSequentialGroup()
-                        .add(jTextFieldScatteringCurveFile, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 274, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jButton1)))
-                .add(254, 254, 254))
+                        .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -304,11 +373,7 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(jLabel6)
-                            .add(jTextFieldNumberOfQPointsToAverage, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabel7)
-                            .add(jTextFieldExponentAlphaOfPowerLaw, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                            .add(jTextFieldNumberOfQPointsToAverage, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(jLabel8)
@@ -322,16 +387,19 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
                             .add(jLabel10)
                             .add(jTextFieldScalingFactor, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jComboBackGround, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jLabel11))))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jLabel7)
+                            .add(jTextFieldExponentAlphaOfPowerLaw, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(87, 87, 87))
         );
 
         jPanel3.setBackground(resourceMap.getColor("jPanel3.background")); // NOI18N
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(-16777216,true)));
         jPanel3.setName("jPanel3"); // NOI18N
 
+        jCheckBoxCollimation.setBackground(resourceMap.getColor("jCheckBoxCollimation.background")); // NOI18N
         jCheckBoxCollimation.setFont(jCheckBoxCollimation.getFont().deriveFont((float)10));
         jCheckBoxCollimation.setText(resourceMap.getString("jCheckBoxCollimation.text")); // NOI18N
         jCheckBoxCollimation.setName("jCheckBoxCollimation"); // NOI18N
@@ -394,14 +462,16 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
         jTextFieldRadiusOfTheSampleSlit.setName("jTextFieldRadiusOfTheSampleSlit"); // NOI18N
 
         jPanel4.setBackground(resourceMap.getColor("jPanel4.background")); // NOI18N
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, resourceMap.getString("jPanel4.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, resourceMap.getFont("jPanel4.border.titleFont"))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, resourceMap.getString("jPanel4.border.title"), 0, 0, resourceMap.getFont("jPanel4.border.titleFont"))); // NOI18N
         jPanel4.setFont(jPanel4.getFont().deriveFont((float)10));
         jPanel4.setName("jPanel4"); // NOI18N
 
+        jCheckBox_Mouve_Qpoints_in_the_error_bar.setBackground(resourceMap.getColor("jCheckBox_Mouve_Qpoints_in_the_error_bar.background")); // NOI18N
         jCheckBox_Mouve_Qpoints_in_the_error_bar.setFont(jCheckBox_Mouve_Qpoints_in_the_error_bar.getFont().deriveFont((float)10));
         jCheckBox_Mouve_Qpoints_in_the_error_bar.setText(resourceMap.getString("jCheckBox_Mouve_Qpoints_in_the_error_bar.text")); // NOI18N
         jCheckBox_Mouve_Qpoints_in_the_error_bar.setName("jCheckBox_Mouve_Qpoints_in_the_error_bar"); // NOI18N
 
+        jCheckBoxWavelength_band.setBackground(resourceMap.getColor("jCheckBoxWavelength_band.background")); // NOI18N
         jCheckBoxWavelength_band.setFont(jCheckBoxWavelength_band.getFont().deriveFont((float)10));
         jCheckBoxWavelength_band.setText(resourceMap.getString("jCheckBoxWavelength_band.text")); // NOI18N
         jCheckBoxWavelength_band.setName("jCheckBoxWavelength_band"); // NOI18N
@@ -411,6 +481,7 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
             }
         });
 
+        jCheckBoxDetector.setBackground(resourceMap.getColor("jCheckBoxDetector.background")); // NOI18N
         jCheckBoxDetector.setFont(jCheckBoxDetector.getFont().deriveFont((float)10));
         jCheckBoxDetector.setText(resourceMap.getString("jCheckBoxDetector.text")); // NOI18N
         jCheckBoxDetector.setName("jCheckBoxDetector"); // NOI18N
@@ -420,6 +491,7 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
             }
         });
 
+        jCheckBoxRadialaverage.setBackground(resourceMap.getColor("jCheckBoxRadialaverage.background")); // NOI18N
         jCheckBoxRadialaverage.setFont(jCheckBoxRadialaverage.getFont().deriveFont((float)10));
         jCheckBoxRadialaverage.setText(resourceMap.getString("jCheckBoxRadialaverage.text")); // NOI18N
         jCheckBoxRadialaverage.setName("jCheckBoxRadialaverage"); // NOI18N
@@ -429,6 +501,7 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
             }
         });
 
+        jCheckBoxVertical_Slit.setBackground(resourceMap.getColor("jCheckBoxVertical_Slit.background")); // NOI18N
         jCheckBoxVertical_Slit.setFont(jCheckBoxVertical_Slit.getFont().deriveFont((float)10));
         jCheckBoxVertical_Slit.setText(resourceMap.getString("jCheckBoxVertical_Slit.text")); // NOI18N
         jCheckBoxVertical_Slit.setName("jCheckBoxVertical_Slit"); // NOI18N
@@ -438,6 +511,7 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
             }
         });
 
+        jCheckBoxHorizontalSlit.setBackground(resourceMap.getColor("jCheckBoxHorizontalSlit.background")); // NOI18N
         jCheckBoxHorizontalSlit.setFont(jCheckBoxHorizontalSlit.getFont().deriveFont((float)10));
         jCheckBoxHorizontalSlit.setText(resourceMap.getString("jCheckBoxHorizontalSlit.text")); // NOI18N
         jCheckBoxHorizontalSlit.setName("jCheckBoxHorizontalSlit"); // NOI18N
@@ -544,7 +618,7 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
                         .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jCheckBoxWavelength_band)
                             .add(jCheckBoxVertical_Slit))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 76, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 83, Short.MAX_VALUE)
                         .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jCheckBoxHorizontalSlit)
                             .add(jCheckBoxDetector))
@@ -636,7 +710,7 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
                                 .add(jTextFieldRadiusOfTheSampleSlit, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .add(jTextFieldSampleDetectorDistance, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .add(jTextFieldRadiusOftheSourceSlit, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -701,28 +775,31 @@ public class SingleExperimentJDialog extends javax.swing.JDialog implements Genf
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                        .add(526, 526, 526)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 774, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(jbuttonOK)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButtonCancel))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, 0, 671, Short.MAX_VALUE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                        .add(18, 18, 18)
+                        .add(jButtonCancel)
+                        .add(45, 45, 45))
+                    .add(layout.createSequentialGroup()
+                        .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(11, 11, 11)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 274, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jbuttonOK)
                     .add(jButtonCancel))
-                .add(40, 40, 40))
+                .add(81, 81, 81))
         );
 
         pack();
@@ -781,9 +858,20 @@ private void jbuttonOKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:e
      this.singleExperiment.setParam("Fixed rel.err. on the first point", this.jTextFieldFixedRelErrOnTheFirstPoint.getText());
      this.singleExperiment.setParam("Number of lines to skip", this.jTextFieldNumberOfLinesToSkip.getText());     
      this.singleExperiment.setParam("Maximum Distance for p(r) calculation", this.jTextFieldMaximumDistanceFopCalculation.getText());
-     this.singleExperiment.setParam("Scaling Factor", this.jTextFieldScalingFactor.getText());     
+      /** Scaling factor up to 78 spaces is the value then static text has to be added **/
+     String scalingFactor = String.format("%-37s", this.jTextFieldScalingFactor.getText());
+     scalingFactor = scalingFactor + "[-----Link-Function (up to 300 characters ...";
+     this.singleExperiment.setParam("Scaling Factor", scalingFactor);  
+     
      this.singleExperiment.setParam("Num. of Q-points to average", this.jTextFieldNumberOfQPointsToAverage.getText());
-     this.singleExperiment.setParam("Flag Background", this.jComboBackGround.getSelectedItem().toString().trim());
+     if (Integer.parseInt(this.jComboBackGround.getSelectedItem().toString()) > 3){
+         /** This is the separation between background Flag and function **/
+         this.singleExperiment.setParam("Flag Background", this.jComboBackGround.getSelectedItem().toString().trim() + "                                     " + this.jTextFieldBackgroundFunction.getText());
+     }
+     else{
+         this.singleExperiment.setParam("Flag Background", this.jComboBackGround.getSelectedItem().toString().trim());
+     }  
+     this.singleExperiment.setParam("Num. of Q-points to average", this.jTextFieldNumberOfQPointsToAverage.getText());     
      this.singleExperiment.setParam("Exponent alpha of power-law", this.jTextFieldExponentAlphaOfPowerLaw.getText());
      
      
@@ -932,8 +1020,23 @@ private void jbuttonOKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:e
     }//GEN-LAST:event_jButton1ActionPerformed
 
 private void jComboBackGroundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBackGroundActionPerformed
-// TODO add your handling code here:
+   if (Integer.parseInt(this.jComboBackGround.getSelectedItem().toString()) < 4){
+       this.jTextFieldBackgroundFunction.disable();
+   }   
+   else{
+       this.jTextFieldBackgroundFunction.enable();
+   }
+   this.jTextFieldBackgroundFunction.setEditable(Integer.parseInt(this.jComboBackGround.getSelectedItem().toString()) > 3);
+    
 }//GEN-LAST:event_jComboBackGroundActionPerformed
+
+private void EditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditMouseClicked
+    this.editor = new FunctionEditorJDialog(null, true);
+    this.editor.setMaximumCharacters(300);
+    this.editor.setText(this.jTextFieldBackgroundFunction.getText());
+    this.editor.genfitEvent.addListener(this);
+    this.editor.setVisible(true);
+}//GEN-LAST:event_EditMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1038,9 +1141,18 @@ private void jComboBackGroundActionPerformed(java.awt.event.ActionEvent evt) {//
         
         this.jTextFieldMaximumQInDataFile.setText(singleExperiment.getParam("Maximum Q in data file"));
         this.jTextFieldNumberOfLinesToSkip.setText(singleExperiment.getParam("Number of lines to skip"));
-        this.jTextFieldScalingFactor.setText(singleExperiment.getParam("Scaling Factor"));
-//        this.jTextFieldBackground.setText(singleExperiment.getParam("Flag Background"));
-        this.jComboBackGround.setSelectedItem(singleExperiment.getParam("Flag Background"));
+        if (singleExperiment.getParam("Scaling Factor").length() < 30){      
+            this.jTextFieldScalingFactor.setText(singleExperiment.getParam("Scaling Factor").substring(0, singleExperiment.getParam("Scaling Factor").length() - 1).trim());
+        }
+        else{            
+            this.jTextFieldScalingFactor.setText(singleExperiment.getParam("Scaling Factor").substring(0, 30).trim());
+        }
+        
+        this.jComboBackGround.setSelectedItem(singleExperiment.getParam("Flag Background").substring(0, 1));
+        if (singleExperiment.getParam("Flag Background").length() > 37){
+            this.jTextFieldBackgroundFunction.setText(singleExperiment.getParam("Flag Background").substring(38, singleExperiment.getParam("Flag Background").length()));
+        }
+        
     
         /** Collimation panel **/
         this.jTextFieldNumberOPointsForTheConvolution.setText(singleExperiment.getParam("Number of points for the convolution"));
@@ -1103,6 +1215,7 @@ private void jComboBackGroundActionPerformed(java.awt.event.ActionEvent evt) {//
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Edit;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JCheckBox jCheckBoxCollimation;
@@ -1129,6 +1242,7 @@ private void jComboBackGroundActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1141,6 +1255,9 @@ private void jComboBackGroundActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextFieldBackgroundFunction;
     private javax.swing.JTextField jTextFieldDescription;
     private javax.swing.JTextField jTextFieldExponentAlphaOfPowerLaw;
     private javax.swing.JTextField jTextFieldFixedRelErrOnTheFirstPoint;
@@ -1172,6 +1289,11 @@ private void jComboBackGroundActionPerformed(java.awt.event.ActionEvent evt) {//
             /*case OUTPUT_FOLDER_SELECTED:
                 this.jTextFieldOutputFolder.setText(e.filePath);
                 break;*/
+            case OK:
+                this.jTextFieldBackgroundFunction.setText(this.editor.getFunction());
+                this.editor.setVisible(false);
+                break;
+            
             case SCATERING_FILE_SELECTED:
                 this.jTextFieldScatteringCurveFile.setText(e.filePath);
                 break;
