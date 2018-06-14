@@ -864,13 +864,13 @@ private void jbuttonOKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:e
      this.singleExperiment.setParam("Scaling Factor", scalingFactor);  
      
      this.singleExperiment.setParam("Num. of Q-points to average", this.jTextFieldNumberOfQPointsToAverage.getText());
-     if (Integer.parseInt(this.jComboBackGround.getSelectedItem().toString()) > 3){
+     //if (Integer.parseInt(this.jComboBackGround.getSelectedItem().toString()) > 3){
          /** This is the separation between background Flag and function **/
          this.singleExperiment.setParam("Flag Background", this.jComboBackGround.getSelectedItem().toString().trim() + "                                     " + this.jTextFieldBackgroundFunction.getText());
-     }
+     /*}
      else{
          this.singleExperiment.setParam("Flag Background", this.jComboBackGround.getSelectedItem().toString().trim());
-     }  
+     } */ 
      this.singleExperiment.setParam("Num. of Q-points to average", this.jTextFieldNumberOfQPointsToAverage.getText());     
      this.singleExperiment.setParam("Exponent alpha of power-law", this.jTextFieldExponentAlphaOfPowerLaw.getText());
      
